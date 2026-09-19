@@ -8,3 +8,5 @@ tmp/
 chromadb/
 .pytest_cache/
 .ruff_cache/
+.vscode/
+.vscode

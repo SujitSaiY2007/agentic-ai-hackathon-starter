@@ -1,13 +1,14 @@
 [project]
 name = "agentic-ai-hackathon-starter"
 version = "0.1.0"
-description = "Reusable Agno + Gemini starter for Agentic AI hackathons"
+description = "Reusable Agno + OpenRouter starter for Agentic AI hackathons"
 requires-python = ">=3.12,<3.13"
 dependencies = [
     "agno[os,mcp]>=3.0,<3.1",
     "chromadb>=1.0",
     "google-genai>=1.0",
     "ddgs>=9.0",
+    "openai>=1.0",
     "pydantic>=2.0",
     "python-dotenv>=1.0",
     "rich>=13.0",

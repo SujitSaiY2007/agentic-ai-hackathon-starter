@@ -1,7 +1,7 @@
-from pydantic import BaseModel, Field
 from agno.agent import Agent
+from pydantic import BaseModel, Field
 
-from model import gemini
+from model import openrouter
 
 
 class HackathonPlan(BaseModel):
@@ -15,7 +15,7 @@ class HackathonPlan(BaseModel):
 def run() -> None:
     agent = Agent(
         name="Structured Planner",
-        model=gemini(),
+        model=openrouter(),
         output_schema=HackathonPlan,
         instructions="Design a minimal architecture. Do not add components without a reason.",
     )

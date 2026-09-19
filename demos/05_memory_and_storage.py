@@ -2,7 +2,7 @@ from agno.agent import Agent
 from agno.db.sqlite import SqliteDb
 
 from config import DB_PATH
-from model import gemini
+from model import openrouter
 
 
 def run() -> None:
@@ -10,7 +10,7 @@ def run() -> None:
 
     agent = Agent(
         name="Persistent Agent",
-        model=gemini(),
+        model=openrouter(),
         db=db,
         add_history_to_context=True,
         num_history_runs=5,

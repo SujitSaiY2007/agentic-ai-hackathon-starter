@@ -1,7 +1,7 @@
 from agno.agent import Agent
 from agno.tools.websearch import WebSearchTools
 
-from model import gemini
+from model import openrouter
 
 
 def get_hackathon_advice(topic: str) -> str:
@@ -12,7 +12,7 @@ def get_hackathon_advice(topic: str) -> str:
 def run() -> None:
     agent = Agent(
         name="Tool Agent",
-        model=gemini(),
+        model=openrouter(),
         tools=[get_hackathon_advice, WebSearchTools()],
         markdown=True,
         instructions=[

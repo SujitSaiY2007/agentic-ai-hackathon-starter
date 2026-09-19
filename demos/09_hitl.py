@@ -3,7 +3,7 @@ from agno.db.sqlite import SqliteDb
 from agno.tools import tool
 
 from config import DB_PATH
-from model import gemini
+from model import openrouter
 
 
 @tool(requires_confirmation=True)
@@ -15,7 +15,7 @@ def publish_demo(text: str) -> str:
 def run() -> None:
     agent = Agent(
         name="Human Approval Agent",
-        model=gemini(),
+        model=openrouter(),
         tools=[publish_demo],
         db=SqliteDb(db_file=DB_PATH),
         markdown=True,

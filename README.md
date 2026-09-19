@@ -1,4 +1,4 @@
-# Agentic AI Hackathon Starter — Python + Agno + Gemini
+# Agentic AI Hackathon Starter — Python + Agno + OpenRouter
 
 A reusable, hackathon-oriented Agno starter project. The goal is to learn and reuse small building blocks instead of searching documentation during the event.
 
@@ -7,7 +7,7 @@ A reusable, hackathon-oriented Agno starter project. The goal is to learn and re
 - Python 3.12
 - uv
 - Agno 3.x
-- Gemini 3.8 Flash
+- OpenRouter (supporting GPT-4o-mini, Claude 3.5 Sonnet, Llama 3.3, DeepSeek, etc.)
 - SQLite for local persistence
 - ChromaDB for local RAG
 - Pydantic for structured outputs
@@ -20,7 +20,7 @@ A reusable, hackathon-oriented Agno starter project. The goal is to learn and re
 agentic_ai_hackathon_starter/
 ├── app.py                     # Minimal AgentOS server
 ├── run_demo.py                # Run individual learning modules
-├── config.py                  # .env loading + Gemini compatibility
+├── config.py                  # .env loading + OpenRouter configuration
 ├── pyproject.toml
 ├── .env.example
 ├── .gitignore
@@ -83,13 +83,13 @@ This installs the pinned project dependencies from `pyproject.toml`.
 
 ### 5. Create `.env`
 
-Copy `.env.example` to `.env` and put your Gemini API key in it.
+Copy `.env.example` to `.env` and put your OpenRouter API key in it.
 
 ```env
-GOOGLE_API_KEY=your_key_here
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+# Optional model override (defaults to openai/gpt-4o-mini)
+OPENROUTER_MODEL=openai/gpt-4o-mini
 ```
-
-The starter also accepts `GEMINI_API_KEY` and maps it to `GOOGLE_API_KEY` for the Gemini model adapter.
 
 ## First run
 

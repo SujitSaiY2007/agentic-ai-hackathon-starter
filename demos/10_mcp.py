@@ -10,12 +10,12 @@ import os
 from agno.agent import Agent
 from agno.tools.mcp import MCPTools
 
-from config import require_google_key
-from model import gemini
+from config import require_openrouter_key
+from model import openrouter
 
 
 def run_async() -> None:
-    require_google_key()
+    require_openrouter_key()
     url = os.getenv("MCP_SERVER_URL")
     if not url:
         raise RuntimeError(
@@ -27,7 +27,7 @@ def run_async() -> None:
         async with tools:
             agent = Agent(
                 name="MCP Agent",
-                model=gemini(),
+                model=openrouter(),
                 tools=[tools],
                 markdown=True,
             )

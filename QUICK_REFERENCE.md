@@ -1,8 +1,27 @@
 # Agno Hackathon Quick Reference
 
-## Agent
+## Agent (Default Model)
 ```python
-Agent(model=gemini())
+Agent(model=openrouter())
+```
+
+## Agent (Specific OpenRouter Model)
+```python
+# Pass any model string or preset from MODELS
+Agent(model=openrouter("anthropic/claude-3.5-sonnet"))
+Agent(model=openrouter(MODELS.DEEPSEEK_R1))
+Agent(model=openrouter(MODELS.LLAMA_3_3_70B))
+```
+
+## Agent with Fallback Routing (Auto-Failover)
+```python
+# Automatically tries fallback models if the primary is rate-limited or down
+Agent(
+    model=openrouter(
+        id="anthropic/claude-3.5-sonnet",
+        fallback_models=["openai/gpt-4o", "deepseek/deepseek-chat"],
+    )
+)
 ```
 
 ## Tool
@@ -47,7 +66,7 @@ Agent(
 
 ## Team
 ```python
-Team(members=[agent1, agent2], model=gemini())
+Team(members=[agent1, agent2], model=openrouter())
 ```
 
 ## Workflow

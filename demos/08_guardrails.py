@@ -2,13 +2,13 @@ from agno.agent import Agent
 from agno.guardrails import PIIDetectionGuardrail, PromptInjectionGuardrail
 from agno.run import RunStatus
 
-from model import gemini
+from model import openrouter
 
 
 def run() -> None:
     agent = Agent(
         name="Guardrailed Agent",
-        model=gemini(),
+        model=openrouter(),
         pre_hooks=[
             PIIDetectionGuardrail(),
             PromptInjectionGuardrail(),

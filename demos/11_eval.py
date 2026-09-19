@@ -1,19 +1,19 @@
 from agno.agent import Agent
 from agno.eval.accuracy import AccuracyEval
 
-from model import gemini
+from model import openrouter
 
 
 def run() -> None:
     agent = Agent(
         name="Eval Target",
-        model=gemini(),
+        model=openrouter(),
         instructions="Answer arithmetic questions exactly.",
     )
 
     evaluation = AccuracyEval(
         name="Basic arithmetic",
-        model=gemini(),
+        model=openrouter(),
         agent=agent,
         input="What is 12 * 12?",
         expected_output="144",

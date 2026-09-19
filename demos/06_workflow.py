@@ -1,19 +1,19 @@
 from agno.agent import Agent
 from agno.workflow import Workflow
 
-from model import gemini
+from model import openrouter
 
 
 def run() -> None:
     researcher = Agent(
         name="Researcher",
-        model=gemini(),
+        model=openrouter(),
         instructions="Identify the key technical requirements for the requested project.",
     )
 
     writer = Agent(
         name="Planner",
-        model=gemini(),
+        model=openrouter(),
         instructions="Turn the research into a concise implementation plan.",
     )
 
