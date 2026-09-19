@@ -38,7 +38,28 @@ from __future__ import annotations
 
 import math
 from typing import Any
-from agent_interface import BaseAgent
+
+try:
+    from agent_interface import BaseAgent
+except ImportError:
+    from abc import ABC, abstractmethod
+
+    class BaseAgent(ABC):
+        def __init__(self, n_nodes: int, node_capacity: int):
+            self.n_nodes = n_nodes
+            self.node_capacity = node_capacity
+
+        @abstractmethod
+        def reset(self) -> None:
+            raise NotImplementedError
+
+        @abstractmethod
+        def act(self, obs: dict) -> dict:
+            raise NotImplementedError
+
+        @abstractmethod
+        def update(self, obs: dict, reward: float, done: bool, info: dict) -> None:
+            raise NotImplementedError
 
 '''
 
