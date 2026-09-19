@@ -1,0 +1,10 @@
+.venv/
+.env
+__pycache__/
+*.pyc
+.tmp/
+tmp/
+*.db
+chromadb/
+.pytest_cache/
+.ruff_cache/
