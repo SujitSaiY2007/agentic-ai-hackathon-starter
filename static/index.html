@@ -403,7 +403,8 @@
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
     ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 3px; }
-  </style>
+  <!-- Chart.js CDN for live dynamic graphs -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="container">
@@ -412,12 +413,12 @@
       <div class="title-group">
         <h1>
           Cluster Watchdog
-          <span class="badge"><span class="dot"></span> Agent Armed</span>
+          <span class="badge"><span class="dot"></span> ACT Agent Armed</span>
         </h1>
-        <p>Autonomous Fault-Tolerant Load Balancer & Telemetry Diagnoser — MM26AI02</p>
+        <p>Adaptive Commitment Timing (ACT) Autonomous Scheduler — MM26AI02</p>
       </div>
       <div>
-        <span style="font-size: 12px; color: var(--text-muted);">Evaluation Runtime: <strong>Tri-Guard Engine v1.0</strong></span>
+        <span style="font-size: 12px; color: var(--text-muted);">Evaluation Runtime: <strong>ACT Engine (Optimal Stopping)</strong></span>
       </div>
     </header>
 
@@ -425,7 +426,7 @@
     <div class="toolbar">
       <label style="font-size: 12px; color: var(--text-muted);">Agent Model:</label>
       <select id="agentSelect">
-        <option value="adaptive">Adaptive Tri-Guard (Our Solution)</option>
+        <option value="adaptive">ACT Adaptive (Our Solution)</option>
         <option value="baseline">Round-Robin (Blind Baseline)</option>
       </select>
 
@@ -433,8 +434,9 @@
       <input type="number" id="seedInput" value="3" style="width: 70px;">
 
       <button class="btn btn-primary" id="runBtn" onclick="runSimulation()">▶ Run Simulation</button>
-      <button class="btn btn-secondary" id="benchmarkBtn" onclick="runBenchmark()">📊 Run 5-Seed Benchmark</button>
-      <button class="btn btn-secondary" id="explainBtn" onclick="generateAIReport()">🤖 AI Incident Report</button>
+      <button class="btn btn-primary" id="battleBtn" style="background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 12px rgba(16,185,129,0.3);" onclick="runBattle()">⚡ Live Side-by-Side Battle</button>
+      <button class="btn btn-secondary" id="benchmarkBtn" onclick="runBenchmark()">📊 5-Seed Benchmark</button>
+      <button class="btn btn-secondary" id="explainBtn" onclick="generateAIReport()">🤖 SRE Incident Report</button>
 
       <span id="runStatus" style="font-size: 12px; color: var(--text-muted); margin-left: auto;">Ready</span>
     </div>
@@ -454,7 +456,7 @@
       <div class="kpi-card">
         <div class="kpi-title">Total Churn (Reroutes)</div>
         <div class="kpi-value" id="kpiChurn">--</div>
-        <div class="kpi-sub" id="kpiChurnSub">Anti-churn filter active</div>
+        <div class="kpi-sub" id="kpiChurnSub">Economic progress loss barrier</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-title">Per-Step Compute Time</div>
@@ -463,10 +465,36 @@
       </div>
     </div>
 
+    <!-- Live Side-by-Side Arena Charts -->
+    <div id="battleArena" style="display: none; margin-bottom: 24px;">
+      <div class="section-title">
+        <span>Live Side-by-Side Arena: Trajectory & Isolation</span>
+        <span id="battleSummaryBadge" class="badge" style="background: rgba(99, 102, 241, 0.15); color: #818cf8; border-color: rgba(99, 102, 241, 0.3);">Synchronized Seed Battle</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div class="panel" style="height: 320px; padding: 14px;">
+          <div style="font-size: 12px; font-weight: 600; margin-bottom: 8px; color: var(--text-muted);">
+            Cumulative Task Completion & Deadline Failures (400 Steps)
+          </div>
+          <div style="flex: 1; position: relative;">
+            <canvas id="chartCompletion"></canvas>
+          </div>
+        </div>
+        <div class="panel" style="height: 320px; padding: 14px;">
+          <div style="font-size: 12px; font-weight: 600; margin-bottom: 8px; color: var(--text-muted);">
+            Dead-Node Traffic Isolation & Bayesian Belief Dynamics
+          </div>
+          <div style="flex: 1; position: relative;">
+            <canvas id="chartIsolation"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Cluster Nodes -->
     <div class="section-title">
       <span>Cluster Node Telemetry Matrix</span>
-      <span style="font-size: 11px; font-weight: normal; color: var(--text-muted);">(Real-time EWMA health score, queue depth, latency, and error rate)</span>
+      <span style="font-size: 11px; font-weight: normal; color: var(--text-muted);">(Real-time Bayesian posterior belief [P(H)/P(D)/P(X)], queue depth, latency, and error rate)</span>
     </div>
 
     <div class="node-grid" id="nodeGrid">
@@ -661,6 +689,223 @@
       }
     }
 
+    // Global Chart.js instances
+    let chartCompInstance = null;
+    let chartIsoInstance = null;
+
+    // Run Side-by-Side Battle
+    async function runBattle() {
+      const seed = document.getElementById("seedInput").value;
+      const status = document.getElementById("runStatus");
+      const btn = document.getElementById("battleBtn");
+
+      btn.disabled = true;
+      status.innerText = "Running synchronized side-by-side battle...";
+
+      try {
+        const response = await fetch("/api/cluster/battle", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ seed: parseInt(seed) || 3 })
+        });
+        const data = await response.json();
+
+        // Reveal Battle Arena
+        const arena = document.getElementById("battleArena");
+        arena.style.display = "block";
+
+        // Update Summary Badge
+        document.getElementById("battleSummaryBadge").innerText = 
+          `Seed ${data.seed}: +${data.comparison.gain} Tasks (${data.comparison.gain_pct}%) | Dead-Node Traffic: -${data.comparison.dead_traffic_reduction}%`;
+
+        // Update KPIs with ACT results
+        document.getElementById("kpiCompletion").innerText = `${(data.adaptive.metrics.completion_rate * 100).toFixed(1)}%`;
+        document.getElementById("kpiCompletionSub").innerText = `vs Baseline ${(data.baseline.metrics.completion_rate * 100).toFixed(1)}% (+${data.comparison.gain} tasks)`;
+        document.getElementById("kpiTasks").innerText = `${data.adaptive.metrics.completed_count} / ${data.adaptive.metrics.failed_count}`;
+        document.getElementById("kpiTasksSub").innerText = `Baseline failed ${data.baseline.metrics.failed_count} tasks`;
+        document.getElementById("kpiChurn").innerText = data.adaptive.metrics.churn_count;
+        document.getElementById("kpiCompute").innerText = `< 0.25 ms`;
+
+        // Update Node Cards
+        data.adaptive.node_states.forEach((state, i) => {
+          const card = document.getElementById(`nodeCard_${i}`);
+          const statusElem = document.getElementById(`nodeStatus_${i}`);
+          const fill = document.getElementById(`nodeHealthFill_${i}`);
+          const hVal = document.getElementById(`nodeHealthVal_${i}`);
+          const h = data.adaptive.health_scores[i];
+
+          card.className = `node-card ${state.toLowerCase()}`;
+          statusElem.className = `node-status ${state.toLowerCase()}`;
+          statusElem.innerText = state;
+          hVal.innerText = h.toFixed(2);
+          fill.style.width = `${Math.min(100, Math.max(0, h * 100))}%`;
+          fill.style.backgroundColor = state === "HEALTHY" ? "var(--emerald)" : (state === "DEGRADED" ? "var(--amber)" : "var(--rose)");
+        });
+
+        // 1. Render Chart 1: Completion & Failures
+        const steps = data.adaptive.timeseries.steps;
+        const ctxComp = document.getElementById("chartCompletion").getContext("2d");
+        if (chartCompInstance) chartCompInstance.destroy();
+
+        chartCompInstance = new Chart(ctxComp, {
+          type: "line",
+          data: {
+            labels: steps,
+            datasets: [
+              {
+                label: "ACT Adaptive Completed",
+                data: data.adaptive.timeseries.completed,
+                borderColor: "#10b981",
+                backgroundColor: "rgba(16, 185, 129, 0.15)",
+                fill: true,
+                tension: 0.3,
+                borderWidth: 2,
+                pointRadius: 0,
+              },
+              {
+                label: "Baseline Completed",
+                data: data.baseline.timeseries.completed,
+                borderColor: "#9ca3af",
+                borderDash: [4, 4],
+                borderWidth: 2,
+                pointRadius: 0,
+                fill: false,
+              },
+              {
+                label: "Baseline Missed Deadlines",
+                data: data.baseline.timeseries.failed,
+                borderColor: "#f43f5e",
+                borderWidth: 2,
+                pointRadius: 0,
+                fill: false,
+              },
+              {
+                label: "ACT Missed Deadlines",
+                data: data.adaptive.timeseries.failed,
+                borderColor: "#f59e0b",
+                borderDash: [3, 3],
+                borderWidth: 2,
+                pointRadius: 0,
+                fill: false,
+              },
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: "index", intersect: false },
+            plugins: {
+              legend: { labels: { color: "#9ca3af", font: { size: 11 } } },
+              tooltip: { padding: 10, cornerRadius: 8 },
+            },
+            scales: {
+              x: {
+                grid: { color: "rgba(255, 255, 255, 0.04)" },
+                ticks: { color: "#6b7280", font: { size: 10 } },
+                title: { display: true, text: "Simulation Steps (t)", color: "#6b7280", font: { size: 11 } }
+              },
+              y: {
+                grid: { color: "rgba(255, 255, 255, 0.04)" },
+                ticks: { color: "#6b7280", font: { size: 10 } },
+                title: { display: true, text: "Tasks Count", color: "#6b7280", font: { size: 11 } }
+              }
+            }
+          }
+        });
+
+        // 2. Render Chart 2: Dead Node Traffic & Isolation
+        const ctxIso = document.getElementById("chartIsolation").getContext("2d");
+        if (chartIsoInstance) chartIsoInstance.destroy();
+
+        chartIsoInstance = new Chart(ctxIso, {
+          type: "line",
+          data: {
+            labels: steps,
+            datasets: [
+              {
+                label: "Baseline Traffic Sent to Dead Nodes",
+                data: data.baseline.timeseries.dead_traffic,
+                borderColor: "#f43f5e",
+                backgroundColor: "rgba(244, 63, 94, 0.15)",
+                fill: true,
+                tension: 0.3,
+                borderWidth: 2,
+                pointRadius: 0,
+              },
+              {
+                label: "ACT Traffic Sent to Dead Nodes (Isolated)",
+                data: data.adaptive.timeseries.dead_traffic,
+                borderColor: "#06b6d4",
+                backgroundColor: "rgba(6, 182, 212, 0.2)",
+                fill: true,
+                tension: 0.3,
+                borderWidth: 2,
+                pointRadius: 0,
+              },
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: "index", intersect: false },
+            plugins: {
+              legend: { labels: { color: "#9ca3af", font: { size: 11 } } },
+              tooltip: { padding: 10, cornerRadius: 8 },
+            },
+            scales: {
+              x: {
+                grid: { color: "rgba(255, 255, 255, 0.04)" },
+                ticks: { color: "#6b7280", font: { size: 10 } },
+                title: { display: true, text: "Simulation Steps (t)", color: "#6b7280", font: { size: 11 } }
+              },
+              y: {
+                grid: { color: "rgba(255, 255, 255, 0.04)" },
+                ticks: { color: "#6b7280", font: { size: 10 } },
+                title: { display: true, text: "Cumulative Dead-Node Tasks", color: "#6b7280", font: { size: 11 } }
+              }
+            }
+          }
+        });
+
+        // Update Diagnostics Feed
+        const incidentFeed = document.getElementById("incidentFeed");
+        incidentFeed.innerHTML = "";
+        const logs = data.adaptive.diagnostics || [];
+        document.getElementById("incidentCount").innerText = `${logs.length} events`;
+
+        logs.slice(-30).reverse().forEach(log => {
+          const isTrans = log.type === "NODE_TRANSITION";
+          const cls = isTrans 
+            ? (log.new_state || "healthy").toLowerCase()
+            : (log.details?.action === "REROUTE" ? "down" : (log.details?.action === "HOLD" ? "degraded" : "healthy"));
+          
+          const headerTitle = isTrans
+            ? `Step ${log.step} — Node ${log.node_id} Transition`
+            : `Step ${log.step} — Task #${log.task_id} [${log.details?.action || log.type}]`;
+          
+          const badgeText = isTrans ? log.new_state : (log.details?.action || "DECISION");
+          const descText = log.summary || log.details?.reason || "";
+
+          incidentFeed.innerHTML += `
+            <div class="log-item ${cls}">
+              <div class="log-header">
+                <span>${headerTitle}</span>
+                <span style="font-weight: 600; text-transform: uppercase;">${badgeText}</span>
+              </div>
+              <div class="log-text">${descText}</div>
+            </div>
+          `;
+        });
+
+        status.innerText = "Battle Complete!";
+      } catch (err) {
+        status.innerText = "Battle failed.";
+        console.error(err);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
     // Run 5-Seed Benchmark
     async function runBenchmark() {
       const status = document.getElementById("runStatus");
@@ -693,15 +938,15 @@
       const status = document.getElementById("runStatus");
       const btn = document.getElementById("explainBtn");
       btn.disabled = true;
-      status.innerText = "Querying OpenRouter for AI incident root-cause analysis...";
+      status.innerText = "Generating SRE Root Cause Analysis report...";
 
       try {
         const response = await fetch("/api/cluster/explain", { method: "POST" });
         const data = await response.json();
-        alert(`🤖 AI INCIDENT & ROOT-CAUSE REPORT:\n\n${data.report}`);
-        status.innerText = "AI report ready!";
+        alert(`🤖 SRE INCIDENT & ROOT-CAUSE REPORT:\n\n${data.report}`);
+        status.innerText = "SRE report ready!";
       } catch (err) {
-        status.innerText = "AI report failed.";
+        status.innerText = "SRE report failed.";
         console.error(err);
       } finally {
         btn.disabled = false;

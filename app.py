@@ -205,6 +205,121 @@ async def run_benchmark_endpoint():
     })
 
 
+@app.post("/api/cluster/battle")
+async def run_battle_endpoint(request: Request):
+    """Run a synchronized side-by-side battle: Baseline vs ACT on the exact same seed,
+
+    capturing time-series trajectory for live Chart.js plotting.
+    """
+    global LATEST_DIAGNOSTICS
+    data = await request.json()
+    seed = int(data.get("seed", 3))
+
+    # 1. Run Baseline Episode with sampling
+    b_env = make_sandbox_env(seed=seed, debug=True)
+    b_agent = RoundRobinNoHealthCheck(n_nodes=b_env.n_nodes, node_capacity=b_env.node_capacity)
+    b_obs = b_env.reset()
+    b_agent.reset()
+
+    b_timeseries = {"steps": [], "completed": [], "failed": [], "dead_traffic": []}
+    b_dead_traffic = 0
+
+    for t in range(b_env.episode_length):
+        actions = b_agent.act(b_obs)
+        b_obs, reward, done, info = b_env.step(actions)
+        b_agent.update(b_obs, reward, done, info)
+
+        if "node_true_states" in info:
+            for target_node in actions.values():
+                if info["node_true_states"].get(target_node) == "DOWN":
+                    b_dead_traffic += 1
+
+        if (t + 1) % 10 == 0 or t == b_env.episode_length - 1:
+            log = b_env.get_episode_log()
+            b_timeseries["steps"].append(t + 1)
+            b_timeseries["completed"].append(log["completed_count"])
+            b_timeseries["failed"].append(log["failed_count"])
+            b_timeseries["dead_traffic"].append(b_dead_traffic)
+
+    # 2. Run ACT Adaptive Episode with sampling
+    a_env = make_sandbox_env(seed=seed, debug=True)
+    a_agent = MyAgent(n_nodes=a_env.n_nodes, node_capacity=a_env.node_capacity)
+    a_obs = a_env.reset()
+    a_agent.reset()
+
+    a_timeseries = {
+        "steps": [],
+        "completed": [],
+        "failed": [],
+        "dead_traffic": [],
+        "churn": [],
+        "node_p_down": [],
+    }
+    a_dead_traffic = 0
+    failure_events = []
+
+    for t in range(a_env.episode_length):
+        actions = a_agent.act(a_obs)
+        a_obs, reward, done, info = a_env.step(actions)
+        a_agent.update(a_obs, reward, done, info)
+
+        if "failed_this_step" in info and info["failed_this_step"]:
+            for nid in info["failed_this_step"]:
+                failure_events.append({
+                    "step": t + 1,
+                    "node_id": nid,
+                    "state": info.get("node_true_states", {}).get(nid, "DOWN"),
+                })
+
+        if "node_true_states" in info:
+            for target_node in actions.values():
+                if info["node_true_states"].get(target_node) == "DOWN":
+                    a_dead_traffic += 1
+
+        if (t + 1) % 10 == 0 or t == a_env.episode_length - 1:
+            log = a_env.get_episode_log()
+            a_timeseries["steps"].append(t + 1)
+            a_timeseries["completed"].append(log["completed_count"])
+            a_timeseries["failed"].append(log["failed_count"])
+            a_timeseries["dead_traffic"].append(a_dead_traffic)
+            a_timeseries["churn"].append(log["churn_count"])
+            p_down_list = [round(b[2], 3) for b in a_agent.filter.beliefs]
+            a_timeseries["node_p_down"].append(p_down_list)
+
+    LATEST_DIAGNOSTICS = a_agent.get_diagnostic_report()
+
+    b_final = b_env.get_episode_log()
+    a_final = a_env.get_episode_log()
+
+    gain = a_final["completed_count"] - b_final["completed_count"]
+    traffic_reduction = round(
+        ((b_dead_traffic - a_dead_traffic) / max(1, b_dead_traffic)) * 100, 1
+    )
+
+    return JSONResponse({
+        "seed": seed,
+        "baseline": {
+            "metrics": b_final,
+            "dead_traffic": b_dead_traffic,
+            "timeseries": b_timeseries,
+        },
+        "adaptive": {
+            "metrics": a_final,
+            "dead_traffic": a_dead_traffic,
+            "timeseries": a_timeseries,
+            "node_states": a_agent.node_states,
+            "health_scores": a_agent.health_scores,
+            "diagnostics": a_agent.get_diagnostic_report()[:30],
+        },
+        "comparison": {
+            "gain": gain,
+            "gain_pct": round((gain / max(1, b_final["completed_count"])) * 100, 1),
+            "dead_traffic_reduction": traffic_reduction,
+            "failure_events": failure_events,
+        },
+    })
+
+
 def build_sre_rca_report(diagnostics: list[dict[str, Any]]) -> str:
     """Synthesize a structured, executive-grade Root Cause Analysis (RCA) report from diagnostic events."""
     transitions = [d for d in diagnostics if d.get("type") == "NODE_TRANSITION"]
