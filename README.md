@@ -39,7 +39,18 @@ uv run python verify_submission.py
 # 3. Run the official 5-seed benchmark
 uv run python benchmark.py
 
-# 4. Launch the live visualizer & SRE observability console
+#4. set up api key from open router.
+Configure OpenRouter API Key
+
+The application requires an OpenRouter API key for model initialization.
+
+Create a .env file in the project root:
+
+OPENROUTER_API_KEY=your_openrouter_api_key_here
+
+Replace your_openrouter_api_key_here with your own OpenRouter API key
+
+# 5. Launch the live visualizer & SRE observability console
 uv run python app.py
 # Open http://localhost:7777 in your browser
 ```
