@@ -30,9 +30,9 @@ class BayesianHealthFilter:
             self.P = transition_matrix
         else:
             self.P = [
-                [0.97, 0.02, 0.01],  # From HEALTHY
-                [0.08, 0.82, 0.10],  # From DEGRADED
-                [0.07, 0.05, 0.88],  # From DOWN
+                [0.985, 0.012, 0.003],  # From HEALTHY
+                [0.05, 0.85, 0.10],     # From DEGRADED
+                [0.02, 0.03, 0.95],     # From DOWN
             ]
 
         # Belief vectors: b[j] = [P(H), P(D), P(X)]
@@ -40,11 +40,11 @@ class BayesianHealthFilter:
 
         # History tracking for task progress sensor
         self._prev_task_nodes: dict[int, int] = {}
-        self._prev_task_durations: dict[int, int] = {}
+        self._prev_task_durations: dict[int, float] = {}
 
     def reset(self) -> None:
         """Reset beliefs to initial healthy state."""
-        self.beliefs = [[0.98, 0.015, 0.005] for _ in range(self.n_nodes)]
+        self.beliefs = [[0.985, 0.012, 0.003] for _ in range(self.n_nodes)]
         self._prev_task_nodes.clear()
         self._prev_task_durations.clear()
 
@@ -71,7 +71,7 @@ class BayesianHealthFilter:
                 if curr_task is not None and prev_dur is not None:
                     # If task remained on the same node
                     if curr_task.get("node") == prev_node:
-                        curr_dur = curr_task.get("duration", prev_dur)
+                        curr_dur = curr_task.get("duration_remaining", curr_task.get("duration", prev_dur))
                         if curr_dur < prev_dur:
                             node_progresses[prev_node] += 1
                         else:
@@ -114,7 +114,7 @@ class BayesianHealthFilter:
             t["task_id"]: t["node"] for t in current_tasks_obs if t.get("node") is not None
         }
         self._prev_task_durations = {
-            t["task_id"]: t["duration"] for t in current_tasks_obs
+            t["task_id"]: t.get("duration_remaining", t.get("duration", 0)) for t in current_tasks_obs
         }
 
         return self.beliefs
@@ -129,11 +129,11 @@ class BayesianHealthFilter:
         """Expected work progress units per step on node_id:
 
         Healthy: 1.0
-        Degraded: 0.40
+        Degraded: 0.25 (expected: -0.5 w.p. 0.5)
         Down: 0.0
         """
         b = self.get_belief(node_id)
-        return round(b[0] * 1.0 + b[1] * 0.40 + b[2] * 0.0, 4)
+        return round(b[0] * 1.0 + b[1] * 0.25 + b[2] * 0.0, 4)
 
     def get_health_state_label(self, node_id: int) -> str:
         """Categorical state based on maximum posterior probability."""

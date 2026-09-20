@@ -38,7 +38,7 @@ class ACTAgent(BaseAgent):
         self.explanations = ExplanationEngine()
 
         # Task metadata tracking
-        self.task_original_durations: dict[int, int] = {}
+        self.task_original_durations: dict[int, float] = {}
         self.task_first_seen_step: dict[int, int] = {}
         self.prev_node_states: list[str] = ["HEALTHY"] * n_nodes
 
@@ -60,7 +60,7 @@ class ACTAgent(BaseAgent):
         for t in tasks_obs:
             tid = t["task_id"]
             if tid not in self.task_original_durations:
-                self.task_original_durations[tid] = t["duration"]
+                self.task_original_durations[tid] = t.get("duration_remaining", t.get("duration", 0))
                 self.task_first_seen_step[tid] = self.current_step
             t["original_duration"] = self.task_original_durations[tid]
 

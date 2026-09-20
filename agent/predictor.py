@@ -50,7 +50,8 @@ class ValuePredictor:
         if not is_already_on_node and current_node_queues[node_id] >= self.node_capacity:
             return -999.0  # Infeasible due to capacity
 
-        duration = task.get("original_duration", task["duration"]) if eval_as_reroute else task["duration"]
+        task_dur = task.get("duration_remaining", task.get("duration", 0))
+        duration = task.get("original_duration", task_dur) if eval_as_reroute else task_dur
         deadline = task["deadline"]
         time_available = deadline - current_step
 
@@ -59,7 +60,7 @@ class ValuePredictor:
             return -1.0  # Inevitable deadline miss
 
         # Expected progress rate on node_id:
-        # Healthy: 1.0, Degraded: 0.40, Down: 0.0
+        # Healthy: 1.0, Degraded: 0.25, Down: 0.0
         rate = self.filter.get_expected_progress_rate(node_id)
         belief = self.filter.get_belief(node_id)
         p_down = belief[2]

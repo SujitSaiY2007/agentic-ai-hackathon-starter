@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cluster Watchdog — Autonomous Fault-Tolerant ACT Agent (MM26AI02)</title>
   
-  <!-- Modern Inter Font & Chart.js & Marked.js for Markdown SRE Reports -->
+  <!-- Modern Fonts & Chart.js & Marked.js for Markdown SRE Reports -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked@11.1.1/marked.min.js"></script>
 
@@ -59,12 +59,12 @@
         radial-gradient(ellipse at 50% 50%, rgba(14, 20, 36, 0.7) 0px, transparent 100%);
       color: var(--text-main);
       min-height: 100vh;
-      padding: 24px 32px;
+      padding: 20px 28px;
       line-height: 1.5;
     }
 
     .container {
-      max-width: 1520px;
+      max-width: 1560px;
       margin: 0 auto;
     }
 
@@ -73,13 +73,15 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 22px;
-      padding-bottom: 18px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
       border-bottom: 1px solid var(--card-border);
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
     .title-group h1 {
-      font-size: 26px;
+      font-size: 24px;
       font-weight: 800;
       letter-spacing: -0.02em;
       background: linear-gradient(135deg, #ffffff 30%, #cbd5e1 70%, #94a3b8 100%);
@@ -87,7 +89,7 @@
       -webkit-text-fill-color: transparent;
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
 
     .title-group p {
@@ -96,33 +98,50 @@
       margin-top: 3px;
     }
 
-    .header-links {
+    .header-badges {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     .badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 5px 12px;
+      padding: 4px 10px;
       border-radius: 9999px;
       font-size: 11px;
       font-weight: 700;
       letter-spacing: 0.02em;
-      background: rgba(16, 185, 129, 0.12);
-      color: var(--emerald);
-      border: 1px solid rgba(16, 185, 129, 0.28);
-      box-shadow: 0 0 16px rgba(16, 185, 129, 0.15);
     }
 
-    .badge .dot {
+    .badge-tier1 {
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--emerald);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.15);
+    }
+
+    .badge-tier2 {
+      background: rgba(99, 102, 241, 0.14);
+      color: #a5b4fc;
+      border: 1px solid rgba(99, 102, 241, 0.35);
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.15);
+    }
+
+    .badge-act {
+      background: rgba(6, 182, 212, 0.12);
+      color: var(--cyan);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+    }
+
+    .dot {
       width: 7px;
       height: 7px;
       border-radius: 50%;
-      background: var(--emerald);
-      box-shadow: 0 0 10px var(--emerald);
+      background: currentColor;
+      box-shadow: 0 0 8px currentColor;
       animation: pulse 1.8s infinite;
     }
 
@@ -130,11 +149,11 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 6px 12px;
+      padding: 5px 10px;
       background: rgba(255, 255, 255, 0.04);
       border: 1px solid var(--card-border);
       border-radius: 8px;
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--text-muted);
       text-decoration: none;
       cursor: pointer;
@@ -151,6 +170,48 @@
       50% { opacity: 0.35; transform: scale(0.85); }
     }
 
+    /* Concept & Architecture Callout Ribbon */
+    .concept-ribbon {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(15, 23, 42, 0.55);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 8px 16px;
+      margin-bottom: 16px;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .concept-chips {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .concept-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 8px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 6px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      cursor: help;
+      transition: all 0.15s;
+    }
+    .concept-chip:hover {
+      background: rgba(99, 102, 241, 0.15);
+      border-color: rgba(99, 102, 241, 0.4);
+      color: #fff;
+    }
+
     /* Action Toolbar */
     .toolbar {
       display: flex;
@@ -159,10 +220,10 @@
       align-items: center;
       background: var(--card-bg);
       backdrop-filter: blur(16px);
-      padding: 14px 20px;
-      border-radius: 14px;
+      padding: 12px 18px;
+      border-radius: 12px;
       border: 1px solid var(--card-border);
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.36);
     }
 
@@ -174,7 +235,7 @@
 
     .toolbar-divider {
       width: 1px;
-      height: 28px;
+      height: 26px;
       background: var(--card-border);
       margin: 0 4px;
     }
@@ -182,10 +243,10 @@
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      border-radius: 9px;
-      font-size: 13px;
+      gap: 7px;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 12.5px;
       font-weight: 600;
       cursor: pointer;
       border: none;
@@ -220,6 +281,16 @@
       box-shadow: 0 6px 20px var(--emerald-glow);
     }
 
+    .btn-cyan {
+      background: linear-gradient(135deg, #06b6d4, #0891b2);
+      color: white;
+      box-shadow: 0 4px 14px var(--cyan-glow);
+    }
+    .btn-cyan:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px var(--cyan-glow);
+    }
+
     .btn-secondary {
       background: rgba(255, 255, 255, 0.05);
       color: var(--text-main);
@@ -231,7 +302,7 @@
     }
 
     .btn-sm {
-      padding: 5px 10px;
+      padding: 4px 9px;
       font-size: 11px;
       border-radius: 6px;
     }
@@ -240,9 +311,9 @@
       background: rgba(0, 0, 0, 0.45);
       border: 1px solid var(--card-border);
       color: white;
-      padding: 8px 12px;
+      padding: 7px 11px;
       border-radius: 8px;
-      font-size: 13px;
+      font-size: 12.5px;
       outline: none;
       transition: border-color 0.2s;
     }
@@ -271,9 +342,9 @@
       background: var(--card-bg);
       backdrop-filter: blur(16px);
       border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 14px 20px;
-      margin-bottom: 20px;
+      border-radius: 12px;
+      padding: 12px 18px;
+      margin-bottom: 18px;
       display: flex;
       flex-direction: column;
       gap: 10px;
@@ -284,12 +355,15 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .timeline-controls {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      flex-wrap: wrap;
     }
 
     .timeline-slider-row {
@@ -321,14 +395,14 @@
       transition: transform 0.1s;
     }
     .slider-range::-webkit-slider-thumb:hover {
-      transform: scale(1.2);
+      transform: scale(1.25);
     }
 
     .timeline-event-banner {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
       padding: 4px 10px;
       border-radius: 6px;
@@ -340,17 +414,17 @@
     /* KPI Grid */
     .kpi-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 16px;
-      margin-bottom: 22px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
     }
 
     .kpi-card {
       background: var(--card-bg);
       backdrop-filter: blur(16px);
       border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 18px 20px;
+      border-radius: 12px;
+      padding: 16px 18px;
       position: relative;
       overflow: hidden;
       box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
@@ -372,16 +446,16 @@
     }
 
     .kpi-title {
-      font-size: 12px;
+      font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.06em;
       font-weight: 700;
       color: var(--text-muted);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .kpi-value {
-      font-size: 32px;
+      font-size: 28px;
       font-weight: 800;
       letter-spacing: -0.03em;
       color: #fff;
@@ -389,9 +463,9 @@
     }
 
     .kpi-sub {
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--emerald);
-      margin-top: 6px;
+      margin-top: 4px;
       display: flex;
       align-items: center;
       gap: 6px;
@@ -400,32 +474,71 @@
 
     /* Section Headers */
     .section-title {
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 700;
       letter-spacing: -0.01em;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
       display: flex;
       align-items: center;
+      justify-content: space-between;
       gap: 10px;
     }
 
-    /* Cluster Matrix */
+    /* Live Telemetry & Dynamics Panels */
+    .charts-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+    @media (max-width: 960px) {
+      .charts-container { grid-template-columns: 1fr; }
+    }
+
+    .chart-panel {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 16px;
+      height: 320px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
+    }
+
+    .chart-header {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Cluster Matrix (6 Nodes) */
     .node-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
+      grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
     }
 
     .node-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 16px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 12px;
+      padding: 15px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       overflow: hidden;
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
+      cursor: pointer;
+    }
+    .node-card:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
     }
 
     .node-card.healthy {
@@ -438,18 +551,18 @@
     .node-card.down {
       border-color: rgba(244, 63, 94, 0.55);
       background: linear-gradient(180deg, rgba(244, 63, 94, 0.1) 0%, rgba(15, 23, 42, 0.75) 100%);
-      box-shadow: 0 0 24px rgba(244, 63, 94, 0.15);
+      box-shadow: 0 0 24px rgba(244, 63, 94, 0.18);
     }
 
     .node-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .node-name {
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 800;
       letter-spacing: -0.01em;
       display: flex;
@@ -460,8 +573,8 @@
     .node-status {
       font-size: 10px;
       font-weight: 800;
-      padding: 3px 8px;
-      border-radius: 6px;
+      padding: 2px 7px;
+      border-radius: 5px;
       letter-spacing: 0.05em;
       text-transform: uppercase;
     }
@@ -470,21 +583,47 @@
     .node-status.degraded { background: rgba(245, 158, 11, 0.18); color: var(--amber); border: 1px solid rgba(245, 158, 11, 0.35); }
     .node-status.down { background: rgba(244, 63, 94, 0.2); color: var(--rose); border: 1px solid rgba(244, 63, 94, 0.4); animation: pulse 1.5s infinite; }
 
+    /* 4-Slot Capacity Visualizer */
+    .slot-visualizer {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 10px;
+    }
+
+    .slot-box {
+      flex: 1;
+      height: 14px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 3px;
+      transition: all 0.2s;
+    }
+    .slot-box.occupied {
+      background: var(--primary);
+      box-shadow: 0 0 6px var(--primary-glow);
+      border-color: rgba(99, 102, 241, 0.5);
+    }
+    .slot-box.stalled {
+      background: var(--rose);
+      box-shadow: 0 0 6px var(--rose-glow);
+      border-color: rgba(244, 63, 94, 0.5);
+    }
+
     .health-bar-container {
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     .health-bar-label {
       display: flex;
       justify-content: space-between;
-      font-size: 11px;
+      font-size: 10.5px;
       color: var(--text-muted);
-      margin-bottom: 5px;
+      margin-bottom: 4px;
       font-weight: 500;
     }
 
     .health-bar {
-      height: 6px;
+      height: 5px;
       background: rgba(255, 255, 255, 0.08);
       border-radius: 4px;
       overflow: hidden;
@@ -500,7 +639,7 @@
     /* Stacked Bayesian Belief Bar */
     .belief-bar {
       display: flex;
-      height: 6px;
+      height: 5px;
       border-radius: 4px;
       overflow: hidden;
       margin-top: 4px;
@@ -511,10 +650,10 @@
     .belief-seg-x { background: var(--rose); transition: width 0.3s; }
 
     .node-stats {
-      font-size: 12px;
+      font-size: 11.5px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
       color: var(--text-muted);
     }
 
@@ -538,13 +677,13 @@
       display: flex;
       flex-wrap: wrap;
       gap: 4px;
-      min-height: 26px;
+      min-height: 24px;
     }
 
     .task-chip-mini {
-      font-size: 10px;
+      font-size: 9.5px;
       font-weight: 700;
-      padding: 2px 6px;
+      padding: 2px 5px;
       border-radius: 4px;
       background: rgba(99, 102, 241, 0.2);
       color: #a5b4fc;
@@ -555,13 +694,41 @@
       color: #fda4af;
       border-color: rgba(244, 63, 94, 0.4);
     }
+    .task-chip-mini.stalled {
+      background: rgba(245, 158, 11, 0.25);
+      color: #fde68a;
+      border-color: rgba(245, 158, 11, 0.4);
+    }
+
+    .node-card-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      padding-top: 6px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .node-action-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 10.5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: color 0.15s;
+    }
+    .node-action-btn:hover {
+      color: var(--cyan);
+    }
 
     /* Three-Column Lower Section */
     .lower-grid {
       display: grid;
       grid-template-columns: 1fr 1fr 1.15fr;
       gap: 16px;
-      margin-bottom: 30px;
+      margin-bottom: 24px;
     }
 
     @media (max-width: 1200px) {
@@ -575,13 +742,127 @@
       background: var(--card-bg);
       backdrop-filter: blur(16px);
       border: 1px solid var(--card-border);
-      border-radius: 14px;
-      padding: 18px 20px;
+      border-radius: 12px;
+      padding: 16px 18px;
       display: flex;
       flex-direction: column;
-      height: 440px;
+      height: 450px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
     }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* Filter Pills */
+    .filter-pills {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-pill {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-pill.active, .filter-pill:hover {
+      background: rgba(99, 102, 241, 0.2);
+      color: #a5b4fc;
+      border-color: rgba(99, 102, 241, 0.4);
+    }
+
+    .panel-body {
+      flex: 1;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding-right: 4px;
+    }
+
+    /* Incident Log Items */
+    .log-item {
+      background: rgba(0, 0, 0, 0.35);
+      border-left: 3px solid var(--primary);
+      padding: 8px 12px;
+      border-radius: 7px;
+      font-size: 11.5px;
+      transition: background 0.15s;
+    }
+    .log-item:hover {
+      background: rgba(0, 0, 0, 0.55);
+    }
+
+    .log-item.degraded { border-left-color: var(--amber); }
+    .log-item.down { border-left-color: var(--rose); }
+    .log-item.healthy { border-left-color: var(--emerald); }
+
+    .log-header {
+      display: flex;
+      justify-content: space-between;
+      color: var(--text-muted);
+      font-size: 10.5px;
+      margin-bottom: 3px;
+      font-weight: 500;
+    }
+
+    .log-text {
+      color: var(--text-main);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    /* Task Item */
+    .task-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 8px 12px;
+      border-radius: 7px;
+      font-size: 11.5px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .task-id {
+      font-weight: 700;
+      color: var(--cyan);
+      font-family: var(--font-mono);
+    }
+
+    .task-progress {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 10.5px;
+      color: var(--text-muted);
+    }
+
+    .progress-pill {
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-weight: 700;
+      font-size: 9.5px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .progress-pill.inflight { background: rgba(99, 102, 241, 0.2); color: #818cf8; }
+    .progress-pill.held { background: rgba(245, 158, 11, 0.2); color: var(--amber); }
+    .progress-pill.urgent { background: rgba(244, 63, 94, 0.2); color: var(--rose); }
 
     /* Copilot Chat UI */
     .chat-messages {
@@ -589,15 +870,15 @@
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      padding-right: 6px;
-      margin-bottom: 10px;
+      gap: 8px;
+      padding-right: 4px;
+      margin-bottom: 8px;
     }
 
     .chat-msg {
-      padding: 10px 14px;
-      border-radius: 10px;
-      font-size: 12px;
+      padding: 9px 12px;
+      border-radius: 9px;
+      font-size: 11.5px;
       line-height: 1.5;
       max-width: 95%;
       word-wrap: break-word;
@@ -620,21 +901,20 @@
     .prompt-pills {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 10px;
+      gap: 5px;
+      margin-bottom: 8px;
     }
 
     .prompt-pill {
-      font-size: 10.5px;
-      padding: 3px 8px;
-      border-radius: 6px;
+      font-size: 10px;
+      padding: 3px 7px;
+      border-radius: 5px;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--card-border);
       color: var(--text-muted);
       cursor: pointer;
       transition: all 0.15s;
     }
-
     .prompt-pill:hover {
       background: rgba(99, 102, 241, 0.2);
       color: #a5b4fc;
@@ -652,105 +932,14 @@
       background: rgba(0, 0, 0, 0.45);
       border: 1px solid var(--card-border);
       color: #fff;
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-size: 12px;
+      padding: 7px 11px;
+      border-radius: 7px;
+      font-size: 11.5px;
       outline: none;
     }
-
     .chat-input:focus {
       border-color: var(--primary);
     }
-
-    .panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    }
-
-    .panel-body {
-      flex: 1;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      padding-right: 6px;
-    }
-
-    /* Incident Log Items */
-    .log-item {
-      background: rgba(0, 0, 0, 0.35);
-      border-left: 3px solid var(--primary);
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-size: 12px;
-      transition: background 0.15s;
-    }
-    .log-item:hover {
-      background: rgba(0, 0, 0, 0.55);
-    }
-
-    .log-item.degraded { border-left-color: var(--amber); }
-    .log-item.down { border-left-color: var(--rose); }
-    .log-item.healthy { border-left-color: var(--emerald); }
-
-    .log-header {
-      display: flex;
-      justify-content: space-between;
-      color: var(--text-muted);
-      font-size: 11px;
-      margin-bottom: 4px;
-      font-weight: 500;
-    }
-
-    .log-text {
-      color: var(--text-main);
-      font-family: var(--font-mono);
-      font-size: 11.5px;
-      line-height: 1.4;
-    }
-
-    /* Task Item */
-    .task-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: rgba(0, 0, 0, 0.35);
-      padding: 10px 14px;
-      border-radius: 8px;
-      font-size: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.04);
-    }
-
-    .task-id {
-      font-weight: 700;
-      color: var(--cyan);
-      font-family: var(--font-mono);
-    }
-
-    .task-progress {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .progress-pill {
-      padding: 3px 8px;
-      border-radius: 5px;
-      font-weight: 700;
-      font-size: 10px;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-    }
-
-    .progress-pill.inflight { background: rgba(99, 102, 241, 0.2); color: #818cf8; }
-    .progress-pill.held { background: rgba(245, 158, 11, 0.2); color: var(--amber); }
-    .progress-pill.urgent { background: rgba(244, 63, 94, 0.2); color: var(--rose); }
 
     /* Modals */
     .modal-backdrop {
@@ -759,7 +948,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.75);
+      background: rgba(0, 0, 0, 0.78);
       backdrop-filter: blur(8px);
       display: none;
       align-items: center;
@@ -772,9 +961,9 @@
     .modal-container {
       background: var(--bg-surface);
       border: 1px solid rgba(255, 255, 255, 0.14);
-      border-radius: 16px;
+      border-radius: 14px;
       width: 100%;
-      max-width: 900px;
+      max-width: 880px;
       max-height: 85vh;
       display: flex;
       flex-direction: column;
@@ -786,13 +975,13 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 18px 24px;
+      padding: 16px 20px;
       border-bottom: 1px solid var(--card-border);
       background: rgba(255, 255, 255, 0.02);
     }
 
     .modal-header h2 {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 700;
       display: flex;
       align-items: center;
@@ -800,10 +989,10 @@
     }
 
     .modal-body {
-      padding: 24px;
+      padding: 20px;
       overflow-y: auto;
       flex: 1;
-      font-size: 13.5px;
+      font-size: 13px;
       line-height: 1.6;
       color: #e2e8f0;
     }
@@ -811,18 +1000,18 @@
     /* Markdown inside SRE Modal */
     .modal-body h1, .modal-body h2, .modal-body h3 {
       color: #fff;
-      margin: 16px 0 8px;
+      margin: 14px 0 6px;
     }
-    .modal-body h2 { font-size: 16px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 6px; }
-    .modal-body h3 { font-size: 14px; color: #a5b4fc; }
-    .modal-body ul { margin-left: 20px; margin-bottom: 12px; }
-    .modal-body li { margin-bottom: 4px; }
+    .modal-body h2 { font-size: 15px; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 5px; }
+    .modal-body h3 { font-size: 13.5px; color: #a5b4fc; }
+    .modal-body ul { margin-left: 18px; margin-bottom: 10px; }
+    .modal-body li { margin-bottom: 3px; }
     .modal-body code {
       background: rgba(0, 0, 0, 0.4);
-      padding: 2px 6px;
+      padding: 2px 5px;
       border-radius: 4px;
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 11.5px;
       color: #38bdf8;
     }
 
@@ -830,7 +1019,7 @@
       display: flex;
       justify-content: flex-end;
       gap: 10px;
-      padding: 14px 24px;
+      padding: 12px 20px;
       border-top: 1px solid var(--card-border);
       background: rgba(255, 255, 255, 0.02);
     }
@@ -839,7 +1028,7 @@
       background: none;
       border: none;
       color: var(--text-muted);
-      font-size: 20px;
+      font-size: 18px;
       cursor: pointer;
       line-height: 1;
     }
@@ -849,19 +1038,19 @@
     .benchmark-table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 16px;
-      font-size: 12.5px;
+      margin-top: 14px;
+      font-size: 12px;
     }
     .benchmark-table th {
       text-align: left;
-      padding: 10px 12px;
+      padding: 8px 10px;
       background: rgba(255, 255, 255, 0.04);
       color: var(--text-muted);
       font-weight: 600;
       border-bottom: 1px solid var(--card-border);
     }
     .benchmark-table td {
-      padding: 12px;
+      padding: 10px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.04);
       font-variant-numeric: tabular-nums;
     }
@@ -872,19 +1061,19 @@
     /* Toast Notification */
     .toast {
       position: fixed;
-      bottom: 24px;
-      right: 24px;
+      bottom: 20px;
+      right: 20px;
       background: rgba(15, 23, 42, 0.95);
       border: 1px solid rgba(99, 102, 241, 0.4);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
       color: #fff;
-      padding: 12px 20px;
-      border-radius: 10px;
-      font-size: 13px;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 12px;
       font-weight: 500;
       display: none;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       z-index: 2000;
       animation: slideUp 0.2s ease-out;
     }
@@ -899,7 +1088,7 @@
     }
 
     /* Custom Scrollbar */
-    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.15); }
     ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.25); }
@@ -912,11 +1101,15 @@
       <div class="title-group">
         <h1>
           Cluster Watchdog
-          <span class="badge"><span class="dot"></span> ACT Agent Armed</span>
+          <div class="header-badges">
+            <span class="badge badge-tier1"><span class="dot"></span> Tier 1: &lt;0.25ms Data Plane</span>
+            <span class="badge badge-tier2"><span class="dot"></span> Tier 2: SRE Copilot Active</span>
+            <span class="badge badge-act">MM26AI02 Armed</span>
+          </div>
         </h1>
-        <p>Adaptive Commitment Timing (ACT) Autonomous Scheduler — Team MM26AI02</p>
+        <p>Adaptive Commitment Timing (ACT) Autonomous Scheduler — Dual-Tier SRE Resilience Platform</p>
       </div>
-      <div class="header-links">
+      <div style="display: flex; align-items: center; gap: 10px;">
         <button class="link-chip" onclick="copyDashboardUrl()">
           🔗 <span id="urlLabel">http://localhost:7777</span>
         </button>
@@ -926,10 +1119,31 @@
       </div>
     </header>
 
-    <!-- Toolbar -->
+    <!-- Mathematical Concept Callout Ribbon -->
+    <div class="concept-ribbon">
+      <div class="concept-chips">
+        <span style="font-weight: 700; color: #fff;">Core Innovations:</span>
+        <span class="concept-chip" title="Stopping Advantage: Commit when A_k = C_k - H_k > 0, else hold in buffer at -$0.01/step fee">
+          📐 A_k = C_k - H_k (Optimal Stopping)
+        </span>
+        <span class="concept-chip" title="Economic Rerouting: Only reroute if Q_reroute > Q_stay, accounting for cold restart penalty (progress wipe)">
+          🛡️ Q_reroute &gt; Q_stay (Anti-Churn Barrier)
+        </span>
+        <span class="concept-chip" title="Opportunity Cost: Prioritize tasks with highest Δ_k = Q_j1 - Q_j2 to avoid missing scarce 4/4 slots">
+          ⚖️ Δ_k = Q_j1 - Q_j2 (Scarce Slot Priority)
+        </span>
+      </div>
+      <div style="font-size: 11px;">
+        <kbd style="background: rgba(255,255,255,0.08); padding: 2px 5px; border-radius: 4px;">Space</kbd> Play/Pause &nbsp;|&nbsp; 
+        <kbd style="background: rgba(255,255,255,0.08); padding: 2px 5px; border-radius: 4px;">← / →</kbd> Step &nbsp;|&nbsp; 
+        <kbd style="background: rgba(255,255,255,0.08); padding: 2px 5px; border-radius: 4px;">Esc</kbd> Close
+      </div>
+    </div>
+
+    <!-- Action Toolbar -->
     <div class="toolbar">
       <div class="toolbar-group">
-        <label style="font-size: 12px; color: var(--text-muted); font-weight: 600;">Agent:</label>
+        <label style="font-size: 11.5px; color: var(--text-muted); font-weight: 600;">Agent:</label>
         <select id="agentSelect">
           <option value="adaptive">ACT Adaptive (Our Solution)</option>
           <option value="baseline">Round-Robin (Blind Baseline)</option>
@@ -937,8 +1151,8 @@
       </div>
 
       <div class="toolbar-group">
-        <label style="font-size: 12px; color: var(--text-muted); font-weight: 600;">Seed:</label>
-        <input type="number" id="seedInput" value="3" style="width: 70px;">
+        <label style="font-size: 11.5px; color: var(--text-muted); font-weight: 600;">Seed:</label>
+        <input type="number" id="seedInput" value="3" style="width: 65px;">
         <span class="seed-tag" onclick="setSeed(3)" title="Severe Cascading Failures">Seed 3 (Cascading)</span>
         <span class="seed-tag" onclick="setSeed(42)" title="Latency & Degraded Flapping">Seed 42 (Flapping)</span>
         <span class="seed-tag" onclick="setSeed(99)" title="High Inflow Burst">Seed 99 (Burst)</span>
@@ -950,8 +1164,9 @@
       <button class="btn btn-emerald" id="battleBtn" onclick="runBattle()">⚡ Side-by-Side Battle</button>
       <button class="btn btn-secondary" id="benchmarkBtn" onclick="runBenchmark()">📊 5-Seed Benchmark</button>
       <button class="btn btn-secondary" id="explainBtn" onclick="generateAIReport()">🤖 SRE Incident Report</button>
+      <button class="btn btn-cyan" id="chartsToggleBtn" onclick="toggleTelemetryCharts()">📈 Telemetry Charts</button>
 
-      <span id="runStatus" style="font-size: 12px; color: var(--text-muted); margin-left: auto; font-weight: 600;">Ready</span>
+      <span id="runStatus" style="font-size: 11.5px; color: var(--text-muted); margin-left: auto; font-weight: 600;">Ready</span>
     </div>
 
     <!-- Timeline Scrubber & Step Playback (Available after Run Simulation) -->
@@ -965,8 +1180,8 @@
           <button class="btn btn-secondary btn-sm" onclick="timelineJumpToEnd()" title="Jump to end">⏭ End</button>
           <button class="btn btn-secondary btn-sm" onclick="timelineNextEvent()" title="Jump to next critical event">⚡ Next Incident</button>
           
-          <span style="font-size: 12px; color: var(--text-muted); margin-left: 8px;">Speed:</span>
-          <select id="playbackSpeed" style="padding: 4px 8px; font-size: 11px;" onchange="updateSpeed()">
+          <span style="font-size: 11.5px; color: var(--text-muted); margin-left: 6px;">Speed:</span>
+          <select id="playbackSpeed" style="padding: 3px 6px; font-size: 11px;" onchange="updateSpeed()">
             <option value="1">1x (Smooth)</option>
             <option value="2">2x (Fast)</option>
             <option value="5" selected>5x (Rapid)</option>
@@ -976,7 +1191,8 @@
 
         <div class="timeline-event-banner" id="timelineBanner">
           <span>Simulation Step: <strong id="currentStepLabel" style="color: #fff;">1 / 400</strong></span>
-          <span id="stepEventBadge" style="display: none; padding: 2px 6px; border-radius: 4px; font-size: 11px;"></span>
+          <span id="clusterLoadBadge" class="badge" style="background: rgba(99,102,241,0.18); color: #a5b4fc;">Cluster: 0 / 24 slots</span>
+          <span id="stepEventBadge" style="display: none; padding: 2px 6px; border-radius: 4px; font-size: 10.5px;"></span>
         </div>
       </div>
 
@@ -995,7 +1211,7 @@
         <div class="kpi-sub" id="kpiCompletionSub">Ready for simulation</div>
       </div>
       <div class="kpi-card">
-        <div class="kpi-title">Completed vs Failed</div>
+        <div class="kpi-title">Completed vs Missed</div>
         <div class="kpi-value" id="kpiTasks">-- / --</div>
         <div class="kpi-sub" id="kpiTasksSub">Completed / Missed Deadlines</div>
       </div>
@@ -1007,28 +1223,58 @@
       <div class="kpi-card">
         <div class="kpi-title">Decision Latency</div>
         <div class="kpi-value" id="kpiCompute">-- ms</div>
-        <div class="kpi-sub" id="kpiComputeSub">Strict wall-clock budget met</div>
+        <div class="kpi-sub" id="kpiComputeSub">&lt; 1.0 ms hard budget</div>
       </div>
     </div>
 
-    <!-- Live Side-by-Side Arena Charts -->
-    <div id="battleArena" style="display: none; margin-bottom: 24px;">
+    <!-- Dynamic Telemetry Charts Panel (Single-Run & Battle Mode) -->
+    <div id="telemetryChartsSection" style="display: none; margin-bottom: 22px;">
+      <div class="section-title">
+        <span>Live Cluster Dynamics & Bayesian Telemetry</span>
+        <span id="chartModeBadge" class="badge badge-act">Single-Run Dynamics</span>
+      </div>
+      <div class="charts-container">
+        <!-- Chart A: Cluster Utilization & Hold Buffer -->
+        <div class="chart-panel">
+          <div class="chart-header">
+            <span>Cluster Queue Load & Hold Buffer (Max 24 Capacity)</span>
+            <span style="color: var(--cyan); font-weight: 700;">Executing vs Buffer</span>
+          </div>
+          <div style="flex: 1; position: relative;">
+            <canvas id="chartClusterLoad"></canvas>
+          </div>
+        </div>
+        <!-- Chart B: Bayesian Posterior Drift P(Down) -->
+        <div class="chart-panel">
+          <div class="chart-header">
+            <span>Bayesian Posterior Drift P(Down) Across Nodes</span>
+            <span style="color: var(--rose); font-weight: 700;">Pre-Heartbeat Failure Detection</span>
+          </div>
+          <div style="flex: 1; position: relative;">
+            <canvas id="chartBeliefDrift"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Side-by-Side Arena Charts (Battle Mode) -->
+    <div id="battleArena" style="display: none; margin-bottom: 22px;">
       <div class="section-title">
         <span>Live Side-by-Side Arena: Trajectory & Isolation</span>
-        <span id="battleSummaryBadge" class="badge" style="background: rgba(99, 102, 241, 0.15); color: #818cf8; border-color: rgba(99, 102, 241, 0.3);">Synchronized Seed Battle</span>
+        <span id="battleSummaryBadge" class="badge badge-tier2">Synchronized Seed Battle</span>
       </div>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
-        <div class="panel" style="height: 340px; padding: 16px;">
-          <div style="font-size: 12px; font-weight: 600; margin-bottom: 10px; color: var(--text-muted); display: flex; justify-content: space-between;">
-            <span>Cumulative Task Completion & Missed Deadlines (400 Steps)</span>
+      <div class="charts-container">
+        <div class="chart-panel">
+          <div class="chart-header">
+            <span>Cumulative Task Completion & Missed Deadlines</span>
             <span style="color: var(--emerald); font-weight: 700;">ACT Adaptive vs Baseline</span>
           </div>
           <div style="flex: 1; position: relative;">
             <canvas id="chartCompletion"></canvas>
           </div>
         </div>
-        <div class="panel" style="height: 340px; padding: 16px;">
-          <div style="font-size: 12px; font-weight: 600; margin-bottom: 10px; color: var(--text-muted); display: flex; justify-content: space-between;">
+        <div class="chart-panel">
+          <div class="chart-header">
             <span>Dead-Node Traffic Isolation (Zero-Waste Dispatching)</span>
             <span style="color: var(--cyan); font-weight: 700;">Bayesian Filter Shield</span>
           </div>
@@ -1039,10 +1285,10 @@
       </div>
     </div>
 
-    <!-- Cluster Nodes -->
+    <!-- Cluster Nodes Matrix -->
     <div class="section-title">
       <span>Cluster Node Telemetry Matrix</span>
-      <span style="font-size: 11px; font-weight: normal; color: var(--text-muted);">(Real-time Bayesian posterior belief [P(H)/P(D)/P(X)], queue depth, latency, and error rate)</span>
+      <span style="font-size: 11px; font-weight: normal; color: var(--text-muted);">(Click any node card for deep inspection or instant SRE Copilot inquiry)</span>
     </div>
 
     <div class="node-grid" id="nodeGrid">
@@ -1054,8 +1300,15 @@
       <!-- AI Incident Feed -->
       <div class="panel">
         <div class="panel-header">
-          <div class="section-title" style="margin-bottom: 0;">🚨 SRE Watchdog Feed</div>
-          <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;" id="incidentCount">0 incidents</span>
+          <div style="font-weight: 700; font-size: 13.5px;">🚨 SRE Watchdog Feed</div>
+          <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;" id="incidentCount">0 events</span>
+        </div>
+        <div class="filter-pills">
+          <span class="filter-pill active" onclick="setLogFilter('ALL', this)">All</span>
+          <span class="filter-pill" onclick="setLogFilter('NODE_TRANSITION', this)">🚨 Transitions</span>
+          <span class="filter-pill" onclick="setLogFilter('REROUTE', this)">🔄 Reroutes</span>
+          <span class="filter-pill" onclick="setLogFilter('HOLD', this)">⏳ Holds</span>
+          <span class="filter-pill" onclick="setLogFilter('EXPIRED', this)">❌ Missed</span>
         </div>
         <div class="panel-body" id="incidentFeed">
           <div style="color: var(--text-muted); font-size: 12px; padding: 20px; text-align: center;">
@@ -1067,8 +1320,13 @@
       <!-- Live Task Queue -->
       <div class="panel">
         <div class="panel-header">
-          <div class="section-title" style="margin-bottom: 0;">Task Queue & Deadline Watch</div>
+          <div style="font-weight: 700; font-size: 13.5px;">Task Queue & Deadline Watch</div>
           <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;" id="activeTaskCount">0 active tasks</span>
+        </div>
+        <div class="filter-pills">
+          <span class="filter-pill active" onclick="setTaskFilter('ALL', this)">All Active</span>
+          <span class="filter-pill" onclick="setTaskFilter('HELD', this)">⏳ Buffer Holds</span>
+          <span class="filter-pill" onclick="setTaskFilter('URGENT', this)">🔥 Slack &lt; 3s</span>
         </div>
         <div class="panel-body" id="taskFeed">
           <div style="color: var(--text-muted); font-size: 12px; padding: 20px; text-align: center;">
@@ -1080,20 +1338,21 @@
       <!-- SRE Copilot Live Q&A (Active Tier 2 Agentic AI) -->
       <div class="panel" style="border-color: rgba(99, 102, 241, 0.4);">
         <div class="panel-header">
-          <div class="section-title" style="margin-bottom: 0; display: flex; align-items: center; justify-content: space-between; width: 100%;">
+          <div style="font-weight: 700; font-size: 13.5px; display: flex; align-items: center; justify-content: space-between; width: 100%;">
             <span>🤖 SRE Copilot</span>
-            <span class="badge" style="padding: 2px 8px; font-size: 10px;"><span class="dot"></span> Active (Tier 2)</span>
+            <span class="badge badge-tier2" style="padding: 2px 7px; font-size: 9.5px;"><span class="dot"></span> Tier 2 Active</span>
           </div>
         </div>
         <div class="prompt-pills">
-          <span class="prompt-pill" onclick="askPreset('Why did Node 1 fail?')">Why did Node 1 fail?</span>
+          <span class="prompt-pill" onclick="askPreset('Why did Node 1 fail?')">Why Node 1 failed?</span>
           <span class="prompt-pill" onclick="askPreset('Explain COMMIT vs HOLD')">COMMIT vs HOLD</span>
           <span class="prompt-pill" onclick="askPreset('What is cluster capacity?')">Capacity limit</span>
           <span class="prompt-pill" onclick="askPreset('Why is cold restart dangerous?')">Cold restart</span>
+          <span class="prompt-pill" onclick="askPreset('Explain current cluster status')">Cluster summary</span>
         </div>
         <div class="chat-messages" id="copilotChat">
           <div class="chat-msg copilot">
-            <strong>SRE Copilot:</strong> I am your Tier 2 Autonomous SRE Copilot. I have real-time visibility into all 6 nodes, Bayesian beliefs, and task decisions. Ask me anything about the cluster or click a preset question above!
+            <strong>SRE Copilot:</strong> I am your Tier 2 Autonomous SRE Copilot with full real-time telemetry visibility across all 6 nodes and task decision frontiers. Ask me anything or click a preset question above!
           </div>
         </div>
         <div class="chat-input-row">
@@ -1138,6 +1397,23 @@
     </div>
   </div>
 
+  <!-- Node Deep-Dive Inspector Modal -->
+  <div class="modal-backdrop" id="nodeModal">
+    <div class="modal-container" style="max-width: 700px;">
+      <div class="modal-header">
+        <h2 id="nodeModalTitle">🖥️ Node Telemetry Deep Dive</h2>
+        <button class="close-btn" onclick="closeModal('nodeModal')">✕</button>
+      </div>
+      <div class="modal-body" id="nodeModalBody">
+        <!-- Rendered via JS -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary" id="nodeModalAskBtn" onclick="askAboutCurrentModalNode()">🤖 Ask SRE Copilot</button>
+        <button class="btn btn-secondary" onclick="closeModal('nodeModal')">Close</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification -->
   <div class="toast" id="toast">
     <span id="toastMsg">Notification message</span>
@@ -1146,21 +1422,28 @@
   <script>
     // Global simulation state & playback
     let currentTimeline = [];
+    let currentTimeseries = null;
     let currentTimelineIndex = 0;
     let isPlaying = false;
     let playInterval = null;
     let currentReportMarkdown = "";
+    let latestDiagnostics = [];
+    let currentLogFilter = "ALL";
+    let currentTaskFilter = "ALL";
+    let selectedNodeIndex = 0;
 
     // Global Chart.js instances
     let chartCompInstance = null;
     let chartIsoInstance = null;
+    let chartClusterLoadInstance = null;
+    let chartBeliefDriftInstance = null;
 
     // Toast helper
     function showToast(msg) {
       const toast = document.getElementById("toast");
       document.getElementById("toastMsg").innerText = msg;
       toast.style.display = "flex";
-      setTimeout(() => { toast.style.display = "none"; }, 3000);
+      setTimeout(() => { toast.style.display = "none"; }, 2800);
     }
 
     function setSeed(val) {
@@ -1178,24 +1461,46 @@
       document.getElementById(id).style.display = "none";
     }
 
+    // Keyboard Shortcuts
     window.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
+      if (e.target.tagName === "INPUT" || e.target.tagName === "SELECT") return;
+
+      if (e.code === "Space") {
+        e.preventDefault();
+        togglePlayPause();
+      } else if (e.code === "ArrowLeft") {
+        e.preventDefault();
+        timelineStep(-1);
+      } else if (e.code === "ArrowRight") {
+        e.preventDefault();
+        timelineStep(1);
+      } else if (e.key === "Escape") {
         closeModal("sreModal");
         closeModal("benchmarkModal");
+        closeModal("nodeModal");
       }
     });
 
-    // Initialize 6 node cards
+    // Initialize 6 node cards with slot visualizers
     function initNodes() {
       const grid = document.getElementById("nodeGrid");
       grid.innerHTML = "";
       for (let i = 0; i < 6; i++) {
         grid.innerHTML += `
-          <div class="node-card healthy" id="nodeCard_${i}">
+          <div class="node-card healthy" id="nodeCard_${i}" onclick="openNodeModal(${i})">
             <div class="node-header">
               <span class="node-name">🖥️ Node ${i}</span>
               <span class="node-status healthy" id="nodeStatus_${i}">HEALTHY</span>
             </div>
+            
+            <!-- 4-Slot Capacity Visualizer -->
+            <div class="slot-visualizer" id="nodeSlots_${i}" title="4 Hardware Execution Slots">
+              <div class="slot-box" id="slot_${i}_0"></div>
+              <div class="slot-box" id="slot_${i}_1"></div>
+              <div class="slot-box" id="slot_${i}_2"></div>
+              <div class="slot-box" id="slot_${i}_3"></div>
+            </div>
+
             <div class="health-bar-container">
               <div class="health-bar-label">
                 <span>Health Score</span>
@@ -1215,19 +1520,32 @@
               <div class="stat-row"><span>Avg Latency:</span><span id="nodeLat_${i}">12.0 ms</span></div>
               <div class="stat-row"><span>Error Rate:</span><span id="nodeErr_${i}">0.0 %</span></div>
               <div class="stat-row"><span>Heartbeat:</span><span id="nodeHb_${i}" style="color: var(--emerald);">OK</span></div>
-              <div class="stat-row" style="margin-top: 4px; padding-top: 4px; border-top: 1px dashed rgba(255,255,255,0.08); font-size: 11px;">
+              <div class="stat-row" style="margin-top: 2px; padding-top: 3px; border-top: 1px dashed rgba(255,255,255,0.08); font-size: 10.5px;">
                 <span>Belief [H/D/X]:</span>
                 <span id="nodeBelief_${i}" style="font-family: var(--font-mono); color: var(--cyan);">1.00 / 0.00 / 0.00</span>
               </div>
             </div>
             <div class="node-tasks-wrapper" id="nodeTasksWrapper_${i}">
-              <span style="color: var(--text-dim); font-size: 10px;">No in-flight tasks</span>
+              <span style="color: var(--text-dim); font-size: 9.5px;">Queue empty</span>
+            </div>
+            <div class="node-card-footer">
+              <span class="node-action-btn" onclick="event.stopPropagation(); openNodeModal(${i})">🔍 Telemetry</span>
+              <span class="node-action-btn" onclick="event.stopPropagation(); askPreset('Explain Node ${i} status')">🤖 Ask Copilot</span>
             </div>
           </div>
         `;
       }
     }
     initNodes();
+
+    // Toggle Telemetry Charts Section
+    function toggleTelemetryCharts() {
+      const sec = document.getElementById("telemetryChartsSection");
+      sec.style.display = sec.style.display === "none" ? "block" : "none";
+      if (sec.style.display === "block" && currentTimeseries) {
+        renderSingleRunCharts(currentTimeseries);
+      }
+    }
 
     // Run Simulation
     async function runSimulation() {
@@ -1248,27 +1566,36 @@
         });
         const data = await response.json();
 
-        // Populate Timeline
+        // Populate Timeline & Timeseries
         currentTimeline = data.timeline || [];
+        currentTimeseries = data.timeseries || null;
+        latestDiagnostics = data.diagnostics || [];
+
         if (currentTimeline.length > 0) {
           const tCard = document.getElementById("timelineCard");
           tCard.style.display = "flex";
           const slider = document.getElementById("timelineSlider");
           slider.max = currentTimeline.length;
           
-          // Jump to end by default to show full metrics, but user can scrub
+          // Jump to end by default to show final summary
           timelineJump(currentTimeline.length - 1);
         }
 
-        // Update overall KPIs from final metrics
+        // Render single-run telemetry charts if visible
+        if (currentTimeseries) {
+          document.getElementById("telemetryChartsSection").style.display = "block";
+          renderSingleRunCharts(currentTimeseries);
+        }
+
+        // Update overall KPIs
         document.getElementById("kpiCompletion").innerText = `${(data.metrics.completion_rate * 100).toFixed(1)}%`;
         document.getElementById("kpiCompletionSub").innerText = agentType === "adaptive" ? "ACT Agent (Optimal Stopping)" : "Baseline Round-Robin";
         document.getElementById("kpiTasks").innerText = `${data.metrics.completed_count} / ${data.metrics.failed_count}`;
         document.getElementById("kpiChurn").innerText = data.metrics.churn_count;
-        document.getElementById("kpiCompute").innerText = `${data.elapsed_ms.toFixed(1)} ms`;
+        document.getElementById("kpiCompute").innerText = `${data.elapsed_ms.toFixed(2)} ms`;
 
         // Update Diagnostic logs
-        renderDiagnostics(data.diagnostics || []);
+        renderDiagnostics(latestDiagnostics);
 
         status.innerText = "Simulation Complete!";
         showToast("Simulation completed successfully.");
@@ -1281,6 +1608,125 @@
       }
     }
 
+    // Render Single-Run Telemetry Charts (Cluster Load & Bayesian Posterior Drift)
+    function renderSingleRunCharts(ts) {
+      if (!ts || !ts.steps) return;
+
+      // 1. Cluster Load & Hold Buffer
+      const ctxLoad = document.getElementById("chartClusterLoad").getContext("2d");
+      if (chartClusterLoadInstance) chartClusterLoadInstance.destroy();
+
+      chartClusterLoadInstance = new Chart(ctxLoad, {
+        type: "line",
+        data: {
+          labels: ts.steps,
+          datasets: [
+            {
+              label: "Executing Tasks (Slots 0-24)",
+              data: ts.cluster_load,
+              borderColor: "#6366f1",
+              backgroundColor: "rgba(99, 102, 241, 0.15)",
+              fill: true,
+              tension: 0.25,
+              borderWidth: 2,
+              pointRadius: 0,
+            },
+            {
+              label: "Held in Buffer (Optimal Stopping)",
+              data: ts.held_count,
+              borderColor: "#f59e0b",
+              backgroundColor: "rgba(245, 158, 11, 0.15)",
+              fill: true,
+              tension: 0.25,
+              borderWidth: 2,
+              pointRadius: 0,
+            },
+            {
+              label: "Max Cluster Capacity (24 slots)",
+              data: ts.steps.map(() => 24),
+              borderColor: "rgba(255, 255, 255, 0.2)",
+              borderDash: [5, 5],
+              borderWidth: 1.5,
+              pointRadius: 0,
+              fill: false,
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: "index", intersect: false },
+          plugins: {
+            legend: { labels: { color: "#94a3b8", font: { size: 10.5, family: "'Plus Jakarta Sans'" } } },
+            tooltip: { padding: 10, cornerRadius: 8, backgroundColor: "rgba(15, 23, 42, 0.95)" },
+          },
+          scales: {
+            x: {
+              grid: { color: "rgba(255, 255, 255, 0.04)" },
+              ticks: { color: "#64748b", font: { size: 9.5 } },
+              title: { display: true, text: "Simulation Steps (t)", color: "#64748b", font: { size: 10 } }
+            },
+            y: {
+              grid: { color: "rgba(255, 255, 255, 0.04)" },
+              ticks: { color: "#64748b", font: { size: 9.5 } },
+              title: { display: true, text: "Concurrent Tasks", color: "#64748b", font: { size: 10 } },
+              max: 26,
+            }
+          }
+        }
+      });
+
+      // 2. Bayesian Posterior Drift P(Down) Across All 6 Nodes
+      const ctxBelief = document.getElementById("chartBeliefDrift").getContext("2d");
+      if (chartBeliefDriftInstance) chartBeliefDriftInstance.destroy();
+
+      const nodeColors = ["#06b6d4", "#10b981", "#f59e0b", "#f43f5e", "#a855f7", "#ec4899"];
+      const beliefDatasets = [];
+
+      for (let n = 0; n < 6; n++) {
+        beliefDatasets.push({
+          label: `Node ${n} P(Down)`,
+          data: ts.node_p_down.map(pList => pList[n] !== undefined ? pList[n] : 0),
+          borderColor: nodeColors[n],
+          borderWidth: 1.8,
+          pointRadius: 0,
+          fill: false,
+          tension: 0.2,
+        });
+      }
+
+      chartBeliefDriftInstance = new Chart(ctxBelief, {
+        type: "line",
+        data: {
+          labels: ts.steps,
+          datasets: beliefDatasets,
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: "index", intersect: false },
+          plugins: {
+            legend: { labels: { color: "#94a3b8", font: { size: 10, family: "'Plus Jakarta Sans'" } } },
+            tooltip: { padding: 10, cornerRadius: 8, backgroundColor: "rgba(15, 23, 42, 0.95)" },
+          },
+          scales: {
+            x: {
+              grid: { color: "rgba(255, 255, 255, 0.04)" },
+              ticks: { color: "#64748b", font: { size: 9.5 } },
+              title: { display: true, text: "Simulation Steps (t)", color: "#64748b", font: { size: 10 } }
+            },
+            y: {
+              grid: { color: "rgba(255, 255, 255, 0.04)" },
+              ticks: { color: "#64748b", font: { size: 9.5 } },
+              title: { display: true, text: "P(Down) Probability", color: "#64748b", font: { size: 10 } },
+              min: 0,
+              max: 1.05,
+            }
+          }
+        }
+      });
+    }
+
     // Timeline Playback Functions
     function renderTimelineStep(index) {
       if (!currentTimeline || index < 0 || index >= currentTimeline.length) return;
@@ -1290,6 +1736,14 @@
       // Update Slider & Step Labels
       document.getElementById("timelineSlider").value = index + 1;
       document.getElementById("currentStepLabel").innerText = `${stepData.step} / ${currentTimeline.length}`;
+
+      // Update Cluster Load Badge
+      let totalExecuting = 0;
+      stepData.nodes.forEach(n => {
+        totalExecuting += (n.executing_tasks ? n.executing_tasks.length : 0);
+      });
+      const loadPct = Math.round((totalExecuting / 24) * 100);
+      document.getElementById("clusterLoadBadge").innerText = `Cluster: ${totalExecuting} / 24 slots (${loadPct}%)`;
 
       // Update Step Event Banner
       const badge = document.getElementById("stepEventBadge");
@@ -1349,24 +1803,43 @@
           document.getElementById(`beliefX_${i}`).style.width = `${pX * 100}%`;
         }
 
+        // Slot boxes
+        const execTasks = n.executing_tasks || [];
+        for (let s = 0; s < 4; s++) {
+          const slotElem = document.getElementById(`slot_${i}_${s}`);
+          if (slotElem) {
+            if (s < execTasks.length) {
+              const t = execTasks[s];
+              slotElem.className = t.is_stalled ? "slot-box stalled" : "slot-box occupied";
+              slotElem.title = `Slot ${s + 1}: Task #${t.task_id} (d:${t.duration}s)`;
+            } else {
+              slotElem.className = "slot-box";
+              slotElem.title = `Slot ${s + 1}: Empty`;
+            }
+          }
+        }
+
         // In-flight task chips
         const wrapper = document.getElementById(`nodeTasksWrapper_${i}`);
         wrapper.innerHTML = "";
-        const execTasks = n.executing_tasks || [];
         if (execTasks.length === 0) {
-          wrapper.innerHTML = `<span style="color: var(--text-dim); font-size: 10px;">Queue empty</span>`;
+          wrapper.innerHTML = `<span style="color: var(--text-dim); font-size: 9.5px;">Queue empty</span>`;
         } else {
           execTasks.forEach(t => {
             const chip = document.createElement("span");
-            chip.className = `task-chip-mini ${t.just_rerouted ? 'rerouted' : ''}`;
+            chip.className = `task-chip-mini ${t.just_rerouted ? 'rerouted' : (t.is_stalled ? 'stalled' : '')}`;
             chip.innerText = `#${t.task_id} (d:${t.duration})`;
-            chip.title = `Task #${t.task_id} | Slack: ${t.slack}s | Deadline: t=${t.deadline}`;
+            chip.title = `Task #${t.task_id} | Slack: ${t.slack}s | Deadline: t=${t.deadline}${t.just_rerouted ? ' (Rerouted)' : ''}`;
             wrapper.appendChild(chip);
           });
         }
       });
 
       // Update Task List for current step
+      renderTaskList(stepData);
+    }
+
+    function renderTaskList(stepData) {
       const taskFeed = document.getElementById("taskFeed");
       taskFeed.innerHTML = "";
       const held = stepData.held_tasks || [];
@@ -1374,12 +1847,20 @@
       stepData.nodes.forEach(n => {
         if (n.executing_tasks) allStepTasks.push(...n.executing_tasks);
       });
-      document.getElementById("activeTaskCount").innerText = `${allStepTasks.length} in-flight / held`;
 
-      if (allStepTasks.length === 0) {
-        taskFeed.innerHTML = `<div style="color: var(--text-muted); font-size: 12px; padding: 20px; text-align: center;">No active tasks at Step ${stepData.step}.</div>`;
+      let filteredTasks = allStepTasks;
+      if (currentTaskFilter === "HELD") {
+        filteredTasks = allStepTasks.filter(t => t.node === null);
+      } else if (currentTaskFilter === "URGENT") {
+        filteredTasks = allStepTasks.filter(t => t.slack < 3);
+      }
+
+      document.getElementById("activeTaskCount").innerText = `${allStepTasks.length} active (${held.length} held)`;
+
+      if (filteredTasks.length === 0) {
+        taskFeed.innerHTML = `<div style="color: var(--text-muted); font-size: 11.5px; padding: 18px; text-align: center;">No tasks matching filter at Step ${stepData.step}.</div>`;
       } else {
-        allStepTasks.slice(0, 20).forEach(t => {
+        filteredTasks.slice(0, 20).forEach(t => {
           const isHeld = t.node === null;
           const pillClass = isHeld ? "held" : (t.slack < 3 ? "urgent" : "inflight");
           const pillLabel = isHeld ? "HELD BUFFER" : `NODE ${t.node}`;
@@ -1388,7 +1869,8 @@
             <div class="task-item">
               <div>
                 <span class="task-id">Task #${t.task_id}</span>
-                <span style="color: var(--text-muted); margin-left: 8px;">Remaining: <strong>${t.duration}s</strong></span>
+                <span style="color: var(--text-muted); margin-left: 6px;">Rem: <strong>${t.duration}s</strong></span>
+                ${t.just_rerouted ? '<span class="progress-pill urgent" style="margin-left: 4px;">Cold Restart</span>' : ''}
               </div>
               <div class="task-progress">
                 <span>Slack: <strong>${t.slack}s</strong></span>
@@ -1398,6 +1880,17 @@
             </div>
           `;
         });
+      }
+    }
+
+    function setTaskFilter(filter, elem) {
+      currentTaskFilter = filter;
+      document.querySelectorAll("#taskFeed").forEach(f => {});
+      const pills = elem.parentElement.querySelectorAll(".filter-pill");
+      pills.forEach(p => p.classList.remove("active"));
+      elem.classList.add("active");
+      if (currentTimeline && currentTimeline[currentTimelineIndex]) {
+        renderTaskList(currentTimeline[currentTimelineIndex]);
       }
     }
 
@@ -1476,18 +1969,31 @@
       }
     }
 
-    // Diagnostics list renderer
+    // Diagnostics list renderer with filter
     function renderDiagnostics(logs) {
+      latestDiagnostics = logs;
       const incidentFeed = document.getElementById("incidentFeed");
       incidentFeed.innerHTML = "";
-      document.getElementById("incidentCount").innerText = `${logs.length} events`;
 
-      if (logs.length === 0) {
-        incidentFeed.innerHTML = `<div style="color: var(--text-muted); font-size: 12px; padding: 20px; text-align: center;">Zero anomalies detected in this run.</div>`;
+      let filteredLogs = logs;
+      if (currentLogFilter === "NODE_TRANSITION") {
+        filteredLogs = logs.filter(l => l.type === "NODE_TRANSITION");
+      } else if (currentLogFilter === "REROUTE") {
+        filteredLogs = logs.filter(l => l.details?.action === "REROUTE" || l.type === "REROUTE");
+      } else if (currentLogFilter === "HOLD") {
+        filteredLogs = logs.filter(l => (l.details?.action || "").includes("HOLD") || l.type === "HOLD");
+      } else if (currentLogFilter === "EXPIRED") {
+        filteredLogs = logs.filter(l => l.type === "EXPIRED");
+      }
+
+      document.getElementById("incidentCount").innerText = `${filteredLogs.length} / ${logs.length} events`;
+
+      if (filteredLogs.length === 0) {
+        incidentFeed.innerHTML = `<div style="color: var(--text-muted); font-size: 11.5px; padding: 20px; text-align: center;">Zero events matching current filter.</div>`;
         return;
       }
 
-      logs.slice(-40).reverse().forEach(log => {
+      filteredLogs.slice(-40).reverse().forEach(log => {
         const isTrans = log.type === "NODE_TRANSITION";
         const cls = isTrans 
           ? (log.new_state || "healthy").toLowerCase()
@@ -1510,6 +2016,80 @@
           </div>
         `;
       });
+    }
+
+    function setLogFilter(filter, elem) {
+      currentLogFilter = filter;
+      const pills = elem.parentElement.querySelectorAll(".filter-pill");
+      pills.forEach(p => p.classList.remove("active"));
+      elem.classList.add("active");
+      renderDiagnostics(latestDiagnostics);
+    }
+
+    // Node Deep-Dive Modal
+    function openNodeModal(nodeId) {
+      selectedNodeIndex = nodeId;
+      const modal = document.getElementById("nodeModal");
+      document.getElementById("nodeModalTitle").innerText = `🖥️ Worker Node ${nodeId} Telemetry Deep-Dive`;
+      
+      let nodeData = null;
+      if (currentTimeline && currentTimeline[currentTimelineIndex]) {
+        nodeData = currentTimeline[currentTimelineIndex].nodes[nodeId];
+      }
+
+      const body = document.getElementById("nodeModalBody");
+      const st = nodeData ? (nodeData.observed_state || "HEALTHY") : "UNKNOWN";
+      const q = nodeData ? `${nodeData.queue_len} / ${nodeData.capacity || 4}` : "0 / 4";
+      const lat = nodeData ? `${nodeData.latency_ms.toFixed(1)} ms` : "N/A";
+      const err = nodeData ? `${(nodeData.error_rate * 100).toFixed(1)} %` : "N/A";
+      const hb = nodeData ? (nodeData.heartbeat_ok ? "OK" : "LOST") : "N/A";
+      const b = nodeData ? nodeData.belief : { P_H: 1.0, P_D: 0.0, P_X: 0.0 };
+
+      body.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px;">
+          <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid var(--card-border);">
+            <div style="font-size: 10.5px; color: var(--text-muted); text-transform: uppercase;">Observed State</div>
+            <div style="font-size: 16px; font-weight: 800; color: ${st === 'HEALTHY' ? 'var(--emerald)' : (st === 'DEGRADED' ? 'var(--amber)' : 'var(--rose)')};">${st}</div>
+          </div>
+          <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid var(--card-border);">
+            <div style="font-size: 10.5px; color: var(--text-muted); text-transform: uppercase;">Queue Capacity</div>
+            <div style="font-size: 16px; font-weight: 800; color: #fff;">${q}</div>
+          </div>
+          <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid var(--card-border);">
+            <div style="font-size: 10.5px; color: var(--text-muted); text-transform: uppercase;">Heartbeat</div>
+            <div style="font-size: 16px; font-weight: 800; color: ${hb === 'OK' ? 'var(--emerald)' : 'var(--rose)'};">${hb}</div>
+          </div>
+        </div>
+
+        <h3 style="font-size: 13px; color: #fff; margin-bottom: 8px;">Bayesian Belief Distribution:</h3>
+        <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid var(--card-border); margin-bottom: 16px;">
+          <div style="display: flex; justify-content: space-between; font-size: 11px; margin-bottom: 6px;">
+            <span>P(Healthy): <strong>${(b.P_H * 100).toFixed(1)}%</strong></span>
+            <span>P(Degraded): <strong>${(b.P_D * 100).toFixed(1)}%</strong></span>
+            <span>P(Down): <strong>${(b.P_X * 100).toFixed(1)}%</strong></span>
+          </div>
+          <div class="belief-bar" style="height: 8px;">
+            <div class="belief-seg-h" style="width: ${b.P_H * 100}%;"></div>
+            <div class="belief-seg-d" style="width: ${b.P_D * 100}%;"></div>
+            <div class="belief-seg-x" style="width: ${b.P_X * 100}%;"></div>
+          </div>
+        </div>
+
+        <h3 style="font-size: 13px; color: #fff; margin-bottom: 8px;">Live Telemetry Signals:</h3>
+        <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid var(--card-border); font-family: var(--font-mono); font-size: 12px;">
+          <div>• Average Latency: ${lat}</div>
+          <div>• Error Rate: ${err}</div>
+          <div>• Capacity Ceiling: Exactly 4 tasks (hard constraint)</div>
+          <div>• Dynamic Health Score: ${nodeData ? nodeData.health_score.toFixed(2) : '1.00'}</div>
+        </div>
+      `;
+
+      modal.style.display = "flex";
+    }
+
+    function askAboutCurrentModalNode() {
+      closeModal("nodeModal");
+      askPreset(`Explain Node ${selectedNodeIndex} status`);
     }
 
     // Side-by-Side Battle
@@ -1615,19 +2195,19 @@
             maintainAspectRatio: false,
             interaction: { mode: "index", intersect: false },
             plugins: {
-              legend: { labels: { color: "#94a3b8", font: { size: 11, family: "'Plus Jakarta Sans'" } } },
-              tooltip: { padding: 12, cornerRadius: 8, backgroundColor: "rgba(15, 23, 42, 0.95)" },
+              legend: { labels: { color: "#94a3b8", font: { size: 10.5, family: "'Plus Jakarta Sans'" } } },
+              tooltip: { padding: 10, cornerRadius: 8, backgroundColor: "rgba(15, 23, 42, 0.95)" },
             },
             scales: {
               x: {
                 grid: { color: "rgba(255, 255, 255, 0.04)" },
-                ticks: { color: "#64748b", font: { size: 10 } },
-                title: { display: true, text: "Simulation Steps (t)", color: "#64748b", font: { size: 11 } }
+                ticks: { color: "#64748b", font: { size: 9.5 } },
+                title: { display: true, text: "Simulation Steps (t)", color: "#64748b", font: { size: 10 } }
               },
               y: {
                 grid: { color: "rgba(255, 255, 255, 0.04)" },
-                ticks: { color: "#64748b", font: { size: 10 } },
-                title: { display: true, text: "Tasks Count", color: "#64748b", font: { size: 11 } }
+                ticks: { color: "#64748b", font: { size: 9.5 } },
+                title: { display: true, text: "Tasks Count", color: "#64748b", font: { size: 10 } }
               }
             }
           }
@@ -1669,19 +2249,19 @@
             maintainAspectRatio: false,
             interaction: { mode: "index", intersect: false },
             plugins: {
-              legend: { labels: { color: "#94a3b8", font: { size: 11, family: "'Plus Jakarta Sans'" } } },
-              tooltip: { padding: 12, cornerRadius: 8, backgroundColor: "rgba(15, 23, 42, 0.95)" },
+              legend: { labels: { color: "#94a3b8", font: { size: 10.5, family: "'Plus Jakarta Sans'" } } },
+              tooltip: { padding: 10, cornerRadius: 8, backgroundColor: "rgba(15, 23, 42, 0.95)" },
             },
             scales: {
               x: {
                 grid: { color: "rgba(255, 255, 255, 0.04)" },
-                ticks: { color: "#64748b", font: { size: 10 } },
-                title: { display: true, text: "Simulation Steps (t)", color: "#64748b", font: { size: 11 } }
+                ticks: { color: "#64748b", font: { size: 9.5 } },
+                title: { display: true, text: "Simulation Steps (t)", color: "#64748b", font: { size: 10 } }
               },
               y: {
                 grid: { color: "rgba(255, 255, 255, 0.04)" },
-                ticks: { color: "#64748b", font: { size: 10 } },
-                title: { display: true, text: "Cumulative Dead-Node Tasks", color: "#64748b", font: { size: 11 } }
+                ticks: { color: "#64748b", font: { size: 9.5 } },
+                title: { display: true, text: "Cumulative Dead-Node Tasks", color: "#64748b", font: { size: 10 } }
               }
             }
           }
@@ -1712,7 +2292,6 @@
         const response = await fetch("/api/cluster/benchmark");
         const data = await response.json();
 
-        // Build Benchmark Modal HTML
         let tableRows = "";
         if (data.seeds && data.seeds.length > 0) {
           data.seeds.forEach(s => {
@@ -1723,7 +2302,7 @@
                 <td style="color: var(--emerald); font-weight: 700;">${s.adaptive_completed} / ${s.total_tasks} (${s.adaptive_rate}%)</td>
                 <td style="color: var(--emerald); font-weight: 700;">+${s.gain}</td>
                 <td><span style="color: var(--rose);">${s.baseline_bad_traffic}</span> ➔ <span style="color: var(--cyan); font-weight: 700;">${s.adaptive_bad_traffic}</span></td>
-                <td><span class="badge" style="padding: 2px 8px; font-size: 10px;">🏆 ACT WIN</span></td>
+                <td><span class="badge badge-act" style="padding: 2px 7px; font-size: 9.5px;">🏆 ACT WIN</span></td>
               </tr>
             `;
           });
@@ -1731,30 +2310,30 @@
 
         const modalBody = document.getElementById("benchmarkModalBody");
         modalBody.innerHTML = `
-          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px;">
-            <div style="background: rgba(0,0,0,0.3); padding: 14px; border-radius: 10px; border: 1px solid var(--card-border);">
-              <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Adaptive Completed</div>
-              <div style="font-size: 24px; font-weight: 800; color: var(--emerald);">${data.total_adaptive_completed}</div>
-              <div style="font-size: 11px; color: var(--text-muted);">vs Baseline ${data.total_baseline_completed}</div>
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px;">
+            <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid var(--card-border);">
+              <div style="font-size: 10.5px; color: var(--text-muted); text-transform: uppercase;">Adaptive Completed</div>
+              <div style="font-size: 22px; font-weight: 800; color: var(--emerald);">${data.total_adaptive_completed}</div>
+              <div style="font-size: 10.5px; color: var(--text-muted);">vs Baseline ${data.total_baseline_completed}</div>
             </div>
-            <div style="background: rgba(0,0,0,0.3); padding: 14px; border-radius: 10px; border: 1px solid var(--card-border);">
-              <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Net Task Gain</div>
-              <div style="font-size: 24px; font-weight: 800; color: var(--cyan);">+${data.gain}</div>
-              <div style="font-size: 11px; color: var(--cyan);">+${data.gain_pct}% throughput</div>
+            <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid var(--card-border);">
+              <div style="font-size: 10.5px; color: var(--text-muted); text-transform: uppercase;">Net Task Gain</div>
+              <div style="font-size: 22px; font-weight: 800; color: var(--cyan);">+${data.gain}</div>
+              <div style="font-size: 10.5px; color: var(--cyan);">+${data.gain_pct}% throughput</div>
             </div>
-            <div style="background: rgba(0,0,0,0.3); padding: 14px; border-radius: 10px; border: 1px solid var(--card-border);">
-              <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Dead Traffic Blocked</div>
-              <div style="font-size: 24px; font-weight: 800; color: var(--rose);">${data.dead_traffic_reduction}%</div>
-              <div style="font-size: 11px; color: var(--text-muted);">Bayesian isolation</div>
+            <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid var(--card-border);">
+              <div style="font-size: 10.5px; color: var(--text-muted); text-transform: uppercase;">Dead Traffic Blocked</div>
+              <div style="font-size: 22px; font-weight: 800; color: var(--rose);">${data.dead_traffic_reduction}%</div>
+              <div style="font-size: 10.5px; color: var(--text-muted);">Bayesian isolation</div>
             </div>
-            <div style="background: rgba(0,0,0,0.3); padding: 14px; border-radius: 10px; border: 1px solid var(--card-border);">
-              <div style="font-size: 11px; color: var(--text-muted); text-transform: uppercase;">Avg Latency</div>
-              <div style="font-size: 24px; font-weight: 800; color: #fff;">${data.avg_step_ms} ms</div>
-              <div style="font-size: 11px; color: var(--emerald);">per step</div>
+            <div style="background: rgba(0,0,0,0.3); padding: 12px; border-radius: 8px; border: 1px solid var(--card-border);">
+              <div style="font-size: 10.5px; color: var(--text-muted); text-transform: uppercase;">Avg Latency</div>
+              <div style="font-size: 22px; font-weight: 800; color: #fff;">${data.avg_step_ms} ms</div>
+              <div style="font-size: 10.5px; color: var(--emerald);">per step</div>
             </div>
           </div>
 
-          <h3 style="font-size: 14px; margin-bottom: 8px; color: #fff;">Seed-by-Seed Comparative Evaluation:</h3>
+          <h3 style="font-size: 13.5px; margin-bottom: 8px; color: #fff;">Seed-by-Seed Comparative Evaluation:</h3>
           <table class="benchmark-table">
             <thead>
               <tr>
@@ -1809,6 +2388,22 @@
       }
     }
 
+    function copyReportText() {
+      navigator.clipboard.writeText(currentReportMarkdown);
+      showToast("Copied SRE RCA report to clipboard!");
+    }
+
+    function downloadReport() {
+      const blob = new Blob([currentReportMarkdown], { type: "text/markdown" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "Cluster_SRE_RCA_Report.md";
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast("Downloaded SRE RCA report!");
+    }
+
     // SRE Copilot Interactive Chat
     async function sendCopilotQuestion(customQ = null) {
       const input = document.getElementById("copilotInput");
@@ -1847,7 +2442,7 @@
         const loadElem = document.getElementById(loadingId);
         if (loadElem) {
           const renderedAns = typeof marked !== "undefined" ? marked.parse(data.answer) : data.answer;
-          loadElem.innerHTML = `<strong>SRE Copilot:</strong><div style="margin-top: 4px;">${renderedAns}</div>`;
+          loadElem.innerHTML = `<strong>SRE Copilot:</strong><div style="margin-top: 3px;">${renderedAns}</div>`;
         }
       } catch (err) {
         const loadElem = document.getElementById(loadingId);

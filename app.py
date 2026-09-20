@@ -16,11 +16,14 @@ from model import MODELS, openrouter
 
 db = SqliteDb(db_file=DB_PATH)
 
-# 1. General Fast Assistant (uses default OPENROUTER_MODEL or gpt-4o-mini)
+# 1. General Fast Assistant (Free Meta Llama 3.3 70B)
 general_agent = Agent(
     id="general-assistant",
-    name="General Assistant (Fast)",
-    model=openrouter(),
+    name="General Assistant (Free)",
+    model=openrouter(
+        id=MODELS.FREE_LLAMA_3_3_70B,
+        fallback_models=[MODELS.FREE_GEMINI_2_FLASH, MODELS.FREE_DEEPSEEK_V3],
+    ),
     db=db,
     add_history_to_context=True,
     num_history_runs=5,
@@ -31,13 +34,13 @@ general_agent = Agent(
     ],
 )
 
-# 2. Deep Reasoning Agent (powered by DeepSeek R1 / o3-mini)
+# 2. Deep Reasoning Agent (Free DeepSeek R1)
 reasoning_agent = Agent(
     id="reasoning-assistant",
-    name="Deep Reasoning Assistant",
+    name="Deep Reasoning Assistant (Free)",
     model=openrouter(
-        id=MODELS.DEEPSEEK_R1,
-        fallback_models=[MODELS.O3_MINI, MODELS.GPT_4O_MINI],
+        id=MODELS.FREE_DEEPSEEK_R1,
+        fallback_models=[MODELS.FREE_LLAMA_3_3_70B, MODELS.FREE_DEEPSEEK_V3],
     ),
     db=db,
     add_history_to_context=True,
@@ -49,13 +52,13 @@ reasoning_agent = Agent(
     ],
 )
 
-# 3. Claude Intelligence Agent (powered by Claude 3.5/3.7 Sonnet)
+# 3. Claude / High-Intelligence Agent (Free Llama 3.3 70B / Gemini 2.0 Flash)
 claude_agent = Agent(
     id="claude-assistant",
-    name="Claude Intelligence Assistant",
+    name="Intelligence Assistant (Free)",
     model=openrouter(
-        id=MODELS.CLAUDE_3_5_SONNET,
-        fallback_models=[MODELS.GPT_4O],
+        id=MODELS.FREE_LLAMA_3_3_70B,
+        fallback_models=[MODELS.FREE_GEMINI_2_FLASH],
     ),
     db=db,
     add_history_to_context=True,
@@ -67,13 +70,13 @@ claude_agent = Agent(
     ],
 )
 
-# 4. SRE Copilot Agent (powered by Claude 3.5 Sonnet / DeepSeek R1)
+# 4. SRE Copilot Agent (Free DeepSeek R1 / Free Gemini 2.0 Flash)
 sre_copilot_agent = Agent(
     id="sre-copilot",
-    name="Cluster SRE Copilot",
+    name="Cluster SRE Copilot (Free)",
     model=openrouter(
-        id=MODELS.CLAUDE_3_5_SONNET,
-        fallback_models=[MODELS.DEEPSEEK_R1, MODELS.GPT_4O_MINI],
+        id=MODELS.FREE_DEEPSEEK_R1,
+        fallback_models=[MODELS.FREE_GEMINI_2_FLASH],
     ),
     db=db,
     add_history_to_context=True,
@@ -115,17 +118,23 @@ LATEST_DIAGNOSTICS = []
 LATEST_SIMULATION_STATE = {}
 
 
+@app.middleware("http")
+async def intercept_root_for_dashboard(request: Request, call_next):
+    """Ensure the Cluster Watchdog dashboard is served at root / and /dashboard."""
+    if request.url.path in ("/", "/dashboard", "/ui") and request.method == "GET":
+        if INDEX_HTML.exists():
+            return HTMLResponse(content=INDEX_HTML.read_text(encoding="utf-8"))
+    return await call_next(request)
+
+
 @app.get("/dashboard", response_class=HTMLResponse)
 @app.get("/ui", response_class=HTMLResponse)
+@app.get("/", response_class=HTMLResponse)
 async def serve_dashboard():
     """Serve the Cluster Watchdog interactive dashboard."""
     if INDEX_HTML.exists():
         return HTMLResponse(content=INDEX_HTML.read_text(encoding="utf-8"))
     return HTMLResponse(content="<h1>Cluster Watchdog Backend Active</h1><p>Visit /docs for API documentation.</p>")
-
-# Prioritize dashboard over default AgentOS root
-app.router.routes = [r for r in app.router.routes if getattr(r, "path", None) != "/"]
-app.add_api_route("/", serve_dashboard, methods=["GET"], response_class=HTMLResponse)
 
 
 @app.post("/api/cluster/run")
@@ -162,8 +171,8 @@ async def run_simulation_endpoint(request: Request):
         for tid, target_node in actions.items():
             if tid in current_tasks_before:
                 prev_n = current_tasks_before[tid].get("node")
-                orig_dur = current_tasks_before[tid].get("original_duration", current_tasks_before[tid].get("duration", 0))
-                curr_dur = current_tasks_before[tid].get("duration", 0)
+                orig_dur = current_tasks_before[tid].get("original_duration", current_tasks_before[tid].get("duration_remaining", current_tasks_before[tid].get("duration", 0)))
+                curr_dur = current_tasks_before[tid].get("duration_remaining", current_tasks_before[tid].get("duration", 0))
                 dl = current_tasks_before[tid].get("deadline", 0)
                 slack = dl - step_num - curr_dur
 
@@ -192,7 +201,7 @@ async def run_simulation_endpoint(request: Request):
         # Check unassigned tasks that were HELD
         for tid, t_obj in current_tasks_before.items():
             if t_obj.get("node") is None and tid not in actions:
-                dur = t_obj.get("duration", 0)
+                dur = t_obj.get("duration_remaining", t_obj.get("duration", 0))
                 slack = t_obj.get("deadline", 0) - step_num - dur
                 step_events.append({
                     "type": "HOLD",
@@ -254,7 +263,7 @@ async def run_simulation_endpoint(request: Request):
         for t_obj in obs["tasks"]:
             nid = t_obj.get("node")
             tid = t_obj["task_id"]
-            dur = t_obj.get("duration", 0)
+            dur = t_obj.get("duration_remaining", t_obj.get("duration", 0))
             orig_dur = t_obj.get("original_duration", dur)
             dl = t_obj.get("deadline", 0)
             slack = dl - step_num - dur
@@ -263,6 +272,7 @@ async def run_simulation_endpoint(request: Request):
                 "task_id": tid,
                 "node": nid,
                 "duration": dur,
+                "duration_remaining": dur,
                 "original_duration": orig_dur,
                 "deadline": dl,
                 "slack": slack,
@@ -312,6 +322,9 @@ async def run_simulation_endpoint(request: Request):
                 "churn": env.churn_count,
                 "dead_traffic": dead_traffic_count,
                 "active_tasks": len(obs["tasks"]),
+                "held_tasks_count": len(held_tasks_list),
+                "total_executing_tasks": sum(len(n["executing_tasks"]) for n in nodes_snapshot),
+                "cluster_capacity": env.n_nodes * env.node_capacity,
             }
         })
 
@@ -339,6 +352,18 @@ async def run_simulation_endpoint(request: Request):
                     "P_X": round(b[2], 3),
                 }
 
+    # Pre-build timeseries for instant Chart.js rendering
+    timeseries = {
+        "steps": [s["step"] for s in timeline],
+        "completed": [s["metrics"]["completed"] for s in timeline],
+        "failed": [s["metrics"]["failed"] for s in timeline],
+        "churn": [s["metrics"]["churn"] for s in timeline],
+        "dead_traffic": [s["metrics"]["dead_traffic"] for s in timeline],
+        "cluster_load": [s["metrics"]["total_executing_tasks"] for s in timeline],
+        "held_count": [s["metrics"]["held_tasks_count"] for s in timeline],
+        "node_p_down": [[n["belief"]["P_X"] for n in s["nodes"]] for s in timeline],
+    }
+
     response_payload = {
         "agent": agent_type,
         "seed": seed,
@@ -348,6 +373,7 @@ async def run_simulation_endpoint(request: Request):
         "final_tasks": obs["tasks"],
         "diagnostics": diagnostics,
         "timeline": timeline,
+        "timeseries": timeseries,
     }
     LATEST_SIMULATION_STATE = response_payload
 
@@ -630,15 +656,28 @@ async def ask_cluster_copilot(request: Request):
         f"Answer in clear, authoritative, plain English with technical precision."
     )
 
-    # Try running via Agno SRE Copilot Agent (OpenRouter)
+    # Try running via Agno SRE Copilot Agent (OpenRouter Free Tier) with 3.5s non-blocking timeout
+    import asyncio
     try:
         if sre_copilot_agent and hasattr(sre_copilot_agent, "run"):
-            agent_response = sre_copilot_agent.run(context_prompt)
+            agent_response = await asyncio.wait_for(
+                asyncio.to_thread(sre_copilot_agent.run, context_prompt),
+                timeout=3.5
+            )
             if agent_response and hasattr(agent_response, "content") and agent_response.content:
-                return JSONResponse({"answer": agent_response.content})
-    except Exception:
-        # Fallback to intelligent deterministic SRE engine if API key is not configured or offline
-        pass
+                content_str = str(agent_response.content).strip()
+                # Check for OpenRouter credit, quota, model unavailable, or configuration error strings
+                error_keywords = [
+                    "credit", "purchased", "402", "payment", "balance", "insufficient",
+                    "quota", "models array", "must have 3", "rate limit", "exceeded", "unauthorized",
+                    "unavailable for free", "paid version", "use this slug", "not available", "error"
+                ]
+                if not any(k in content_str.lower() for k in error_keywords):
+                    return JSONResponse({"answer": content_str})
+    except asyncio.TimeoutError:
+        print("OpenRouter free model timed out (>3.5s), falling back to instant telemetry SRE engine.")
+    except Exception as e:
+        print(f"OpenRouter SRE error: {e}")
 
     # High-Reliability Intelligent SRE Fallback Logic
     q_lower = question.lower()

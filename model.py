@@ -29,39 +29,38 @@ class OpenRouterModels:
     O3_MINI = "openai/o3-mini"
     QWEN_QWQ_32B = "qwen/qwq-32b-preview"
 
-    # Free Tier (subject to OpenRouter availability)
+    # Free Tier Models (100% Free on OpenRouter, no credits required)
+    FREE_LLAMA_3_3_70B = "meta-llama/llama-3.3-70b-instruct:free"
     FREE_DEEPSEEK_R1 = "deepseek/deepseek-r1:free"
     FREE_DEEPSEEK_V3 = "deepseek/deepseek-chat:free"
-    FREE_LLAMA_3_3_70B = "meta-llama/llama-3.3-70b-instruct:free"
     FREE_GEMINI_2_FLASH = "google/gemini-2.0-flash-exp:free"
+    FREE_QWEN_CODER = "qwen/qwen-2.5-coder-32b-instruct:free"
+    FREE_MISTRAL = "mistralai/mistral-small-24b-instruct-2501:free"
 
-    # OpenRouter Auto Router (automatically selects best model for the prompt)
+    # OpenRouter Auto Router
     AUTO = "openrouter/auto"
 
 
 def openrouter(
     id: str | None = None,
     fallback_models: list[str] | None = None,
-    max_retries: int = 3,
+    max_retries: int = 2,
     **kwargs: Any,
 ) -> OpenRouter:
-    """Create an OpenRouter model instance.
+    """Create an OpenRouter model instance, defaulting to free models if credits are unpurchased.
 
     Args:
-        id: OpenRouter model string (e.g., 'anthropic/claude-3.5-sonnet',
-            'deepseek/deepseek-r1', or presets from OpenRouterModels).
-            If omitted, uses OPENROUTER_MODEL from .env or 'openai/gpt-4o-mini'.
-        fallback_models: Optional list of fallback model IDs to try in order
-            if the primary model encounters rate limits or errors.
+        id: OpenRouter model string (defaults to FREE_LLAMA_3_3_70B).
+        fallback_models: Optional list of fallback free model IDs.
         max_retries: Number of request retry attempts.
-        **kwargs: Additional parameters passed to OpenRouter (e.g. temperature, max_tokens).
+        **kwargs: Additional parameters passed to OpenRouter.
     """
     require_openrouter_key()
-    selected_id = id or MODEL_ID
+    selected_id = id or MODEL_ID or OpenRouterModels.FREE_DEEPSEEK_R1
     models_list = None
     if fallback_models:
-        # OpenRouter dynamic routing includes primary model + fallbacks
         models_list = [selected_id] + [m for m in fallback_models if m != selected_id]
+        models_list = models_list[:3]  # OpenRouter requires <= 3 models in the array
 
     return OpenRouter(
         id=selected_id,

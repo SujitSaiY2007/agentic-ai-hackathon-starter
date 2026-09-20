@@ -135,14 +135,14 @@ class EmissionModel:
         # P(progress | state)
         p_prog = {
             0: 0.999,  # H
-            1: 0.40,   # D
+            1: 0.50,   # D (degraded progress: -0.5 w.p. 0.5)
             2: 0.001,  # X
         }
 
         # P(stall | state)
         p_stall = {
             0: 0.001,  # H
-            1: 0.60,   # D
+            1: 0.50,   # D
             2: 0.999,  # X
         }
 
@@ -185,9 +185,9 @@ class BayesianHealthFilter:
             self.P = transition_matrix
         else:
             self.P = [
-                [0.97, 0.02, 0.01],  # From HEALTHY
-                [0.08, 0.82, 0.10],  # From DEGRADED
-                [0.07, 0.05, 0.88],  # From DOWN
+                [0.985, 0.012, 0.003],  # From HEALTHY
+                [0.05, 0.85, 0.10],     # From DEGRADED
+                [0.02, 0.03, 0.95],     # From DOWN
             ]
 
         # Belief vectors: b[j] = [P(H), P(D), P(X)]
@@ -195,11 +195,11 @@ class BayesianHealthFilter:
 
         # History tracking for task progress sensor
         self._prev_task_nodes: dict[int, int] = {}
-        self._prev_task_durations: dict[int, int] = {}
+        self._prev_task_durations: dict[int, float] = {}
 
     def reset(self) -> None:
         """Reset beliefs to initial healthy state."""
-        self.beliefs = [[0.98, 0.015, 0.005] for _ in range(self.n_nodes)]
+        self.beliefs = [[0.985, 0.012, 0.003] for _ in range(self.n_nodes)]
         self._prev_task_nodes.clear()
         self._prev_task_durations.clear()
 
@@ -226,7 +226,7 @@ class BayesianHealthFilter:
                 if curr_task is not None and prev_dur is not None:
                     # If task remained on the same node
                     if curr_task.get("node") == prev_node:
-                        curr_dur = curr_task.get("duration", prev_dur)
+                        curr_dur = curr_task.get("duration_remaining", curr_task.get("duration", prev_dur))
                         if curr_dur < prev_dur:
                             node_progresses[prev_node] += 1
                         else:
@@ -269,7 +269,7 @@ class BayesianHealthFilter:
             t["task_id"]: t["node"] for t in current_tasks_obs if t.get("node") is not None
         }
         self._prev_task_durations = {
-            t["task_id"]: t["duration"] for t in current_tasks_obs
+            t["task_id"]: t.get("duration_remaining", t.get("duration", 0)) for t in current_tasks_obs
         }
 
         return self.beliefs
@@ -284,11 +284,11 @@ class BayesianHealthFilter:
         """Expected work progress units per step on node_id:
 
         Healthy: 1.0
-        Degraded: 0.40
+        Degraded: 0.25 (expected: -0.5 w.p. 0.5)
         Down: 0.0
         """
         b = self.get_belief(node_id)
-        return round(b[0] * 1.0 + b[1] * 0.40 + b[2] * 0.0, 4)
+        return round(b[0] * 1.0 + b[1] * 0.25 + b[2] * 0.0, 4)
 
     def get_health_state_label(self, node_id: int) -> str:
         """Categorical state based on maximum posterior probability."""
@@ -346,7 +346,8 @@ class ValuePredictor:
         if not is_already_on_node and current_node_queues[node_id] >= self.node_capacity:
             return -999.0  # Infeasible due to capacity
 
-        duration = task.get("original_duration", task["duration"]) if eval_as_reroute else task["duration"]
+        task_dur = task.get("duration_remaining", task.get("duration", 0))
+        duration = task.get("original_duration", task_dur) if eval_as_reroute else task_dur
         deadline = task["deadline"]
         time_available = deadline - current_step
 
@@ -355,7 +356,7 @@ class ValuePredictor:
             return -1.0  # Inevitable deadline miss
 
         # Expected progress rate on node_id:
-        # Healthy: 1.0, Degraded: 0.40, Down: 0.0
+        # Healthy: 1.0, Degraded: 0.25, Down: 0.0
         rate = self.filter.get_expected_progress_rate(node_id)
         belief = self.filter.get_belief(node_id)
         p_down = belief[2]
@@ -686,7 +687,7 @@ class ReroutingManager:
         # Sort running tasks by urgency (tightest slack first)
         sorted_tasks = sorted(
             running_tasks,
-            key=lambda t: t["deadline"] - current_step - t["duration"]
+            key=lambda t: t["deadline"] - current_step - t.get("duration_remaining", t.get("duration", 0))
         )
 
         for task in sorted_tasks:
@@ -711,6 +712,7 @@ class ReroutingManager:
                     current_node_queues[curr_node] -= 1
                     current_node_queues[best_target] += 1
 
+                    task_dur = task.get("duration_remaining", task.get("duration", 0))
                     explanations.append({
                         "task_id": task_id,
                         "action": "REROUTE",
@@ -718,7 +720,7 @@ class ReroutingManager:
                         "to_node": best_target,
                         "q_stay": q_stay,
                         "q_reroute": q_reroute,
-                        "lost_progress": task.get("original_duration", task["duration"]) - task["duration"],
+                        "lost_progress": task.get("original_duration", task_dur) - task_dur,
                         "reason": f"Q_reroute ({q_reroute:.3f}) > Q_stay ({q_stay:.3f}) on node {curr_node}",
                     })
                 else:
@@ -857,7 +859,7 @@ class ACTAgent(BaseAgent):
         self.explanations = ExplanationEngine()
 
         # Task metadata tracking
-        self.task_original_durations: dict[int, int] = {}
+        self.task_original_durations: dict[int, float] = {}
         self.task_first_seen_step: dict[int, int] = {}
         self.prev_node_states: list[str] = ["HEALTHY"] * n_nodes
 
@@ -879,7 +881,7 @@ class ACTAgent(BaseAgent):
         for t in tasks_obs:
             tid = t["task_id"]
             if tid not in self.task_original_durations:
-                self.task_original_durations[tid] = t["duration"]
+                self.task_original_durations[tid] = t.get("duration_remaining", t.get("duration", 0))
                 self.task_first_seen_step[tid] = self.current_step
             t["original_duration"] = self.task_original_durations[tid]
 

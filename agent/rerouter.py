@@ -34,7 +34,7 @@ class ReroutingManager:
         # Sort running tasks by urgency (tightest slack first)
         sorted_tasks = sorted(
             running_tasks,
-            key=lambda t: t["deadline"] - current_step - t["duration"]
+            key=lambda t: t["deadline"] - current_step - t.get("duration_remaining", t.get("duration", 0))
         )
 
         for task in sorted_tasks:
@@ -59,6 +59,7 @@ class ReroutingManager:
                     current_node_queues[curr_node] -= 1
                     current_node_queues[best_target] += 1
 
+                    task_dur = task.get("duration_remaining", task.get("duration", 0))
                     explanations.append({
                         "task_id": task_id,
                         "action": "REROUTE",
@@ -66,7 +67,7 @@ class ReroutingManager:
                         "to_node": best_target,
                         "q_stay": q_stay,
                         "q_reroute": q_reroute,
-                        "lost_progress": task.get("original_duration", task["duration"]) - task["duration"],
+                        "lost_progress": task.get("original_duration", task_dur) - task_dur,
                         "reason": f"Q_reroute ({q_reroute:.3f}) > Q_stay ({q_stay:.3f}) on node {curr_node}",
                     })
                 else:

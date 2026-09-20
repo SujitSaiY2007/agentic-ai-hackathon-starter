@@ -103,14 +103,14 @@ class EmissionModel:
         # P(progress | state)
         p_prog = {
             0: 0.999,  # H
-            1: 0.40,   # D
+            1: 0.50,   # D (degraded progress: -0.5 w.p. 0.5)
             2: 0.001,  # X
         }
 
         # P(stall | state)
         p_stall = {
             0: 0.001,  # H
-            1: 0.60,   # D
+            1: 0.50,   # D
             2: 0.999,  # X
         }
 
