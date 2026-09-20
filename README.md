@@ -30,8 +30,8 @@ If you have [`uv`](https://docs.astral.sh/uv/) installed:
 
 ```bash
 # 1. Clone repository
-git clone <repo-url>
-cd agentic_ai_hackathon_starter
+git clone https://github.com/SujitSaiY2007/agentic-ai-hackathon-starter.git
+cd agentic-ai-hackathon-starter
 
 # 2. Run the automated 5-step compliance check
 uv run python verify_submission.py
@@ -50,8 +50,8 @@ uv run python app.py
 
 ```bash
 # 1. Clone repository
-git clone <repo-url>
-cd agentic_ai_hackathon_starter
+git clone https://github.com/SujitSaiY2007/agentic-ai-hackathon-starter.git
+cd agentic-ai-hackathon-starter
 
 # 2. Create and activate a virtual environment
 python -m venv .venv
@@ -213,7 +213,7 @@ Open **`http://localhost:7777`** to access:
 ## 7. Repository File Map
 
 ```
-agentic_ai_hackathon_starter/
+agentic-ai-hackathon-starter/
 ├── standalone_submission.py       # [PRIMARY SUBMISSION] Zero-dependency single-file bundle
 ├── submission_agent.py            # Canonical modular entry point (MyAgent)
 ├── agent_interface.py             # Official abstract BaseAgent definition
